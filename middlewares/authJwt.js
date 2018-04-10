@@ -4,11 +4,12 @@ const moment = require('moment');
 const secret = process.env.JWTSECRET;
 
 exports.ensureAuth = function (req, res, next) {
-  if (!req.headers.auth) {
+  if (!req.headers.authorization) {
     return res.status(403).send({ message: 'Missing Header' });
   }
 
-  const token = req.headers.auth.replace(/["']/g, '');
+  let token = req.headers.authorization.split(' ')[1];
+  token = token.replace(/["']/g, '');
 
   try {
     const payload = jwt.decode(token, secret);

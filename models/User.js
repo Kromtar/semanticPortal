@@ -9,6 +9,7 @@ const userSchema = new Schema({
 });
 
 userSchema.methods.generateHash = function (password) {
+  //TODO: Revisar ciclo de 8 en bcrypt
   return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
 };
 

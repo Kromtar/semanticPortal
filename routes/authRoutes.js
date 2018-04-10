@@ -1,4 +1,5 @@
 const authJwt = require('../middlewares/authJwt');
+const UserController = require('../controllers/user');
 
 module.exports = app => {
   //Rutas de test
@@ -6,4 +7,10 @@ module.exports = app => {
   app.get('/api/testClose', authJwt.ensureAuth, (req, res) => {
     res.send('Hola UAI :), este ligar SI necesita token');
   });
+
+  app.post(
+   '/api/loginUser',
+   UserController.loginUser
+ );
+ 
 };

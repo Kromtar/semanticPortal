@@ -3,6 +3,11 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 
+//TODO: Agregar HTTPS
+//TODO: Control de ddos
+//TODO: Capcha al crear cuenta (y hacer login ?)
+//TODO: JWT: HttpOnly
+
 mongoose.Promise = global.Promise;
 const app = express();
 
@@ -15,7 +20,7 @@ app.use((req, res, next) => {
   res.header('Access-Control-Allow-Methods', 'GET,HEAD,OPTIONS,POST,PUT,DELETE');
   res.header(
     'Access-Control-Allow-Headers',
-    'Origin, X-Requested-With, Content-Type, Accept, Authorization, auth'
+    'Origin, X-Requested-With, Content-Type, Accept, Authorization'
   );
   next();
 });
@@ -26,6 +31,7 @@ app.use(bodyParser.json());
 
 //añadir rutas http
 require('./routes/authRoutes')(app);
+require('./routes/userRoutes')(app);
 
 //Bypass para cliente
 app.use(express.static('client/build'));
