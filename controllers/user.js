@@ -3,7 +3,10 @@ const jwt = require('../services/jwt');
 
 const User = mongoose.model('users');
 
+//TODO: Es necesario tener proteccion ante DDOS
+
 //Crea un nuevo usuario
+//TODO: Es necesario validar toda la informacion
 async function createUser(req, res) {
   const params = req.body;
   try {

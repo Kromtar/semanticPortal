@@ -5,9 +5,11 @@ import * as actions from '../actions';
 
 import NewAccountModal from './NewAccountModal';
 
+//TODO: Se podria manejar las form con states de cl clase
+
 class Login extends Component {
 
-  //TODO: ERROR AL INGRESAR CKAVE Y 2 VECES RUT CON COLOR switch
+  //TODO: ERROR AL INGRESAR CKAVE Y 2 VECES RUT CON COLOR switch. Actualizar el metodo para validar
 
   state = {
     rutInputClassName: 'validate',
@@ -20,14 +22,12 @@ class Login extends Component {
   }
 
   formatAndValidateRut(rut){
-    console.log('validando'+rut);
     var valor = rut.replace('.','');
     valor = valor.replace('-','');
     var cuerpo = valor.slice(0,-1);
     var dv = valor.slice(-1).toUpperCase();
     rut = cuerpo + '-'+ dv
     if(cuerpo.length < 7) {
-      console.log('a');
       this.props.formError({formId:'login', err:'Rut no valido'});
       this.setState({rutInputClassName: 'validate invalid'});
       //this.props.formInput({formId:'login', inputId:'rut', text: ''});
@@ -44,13 +44,11 @@ class Login extends Component {
     dv = (dv == 'K')?10:dv;
     dv = (dv == 0)?11:dv;
     if(dvEsperado != dv) {
-      console.log('B');
       this.props.formError({formId:'login', err:'Rut no valido'});
       this.setState({rutInputClassName: 'validate invalid'});
       //this.props.formInput({formId:'login', inputId:'rut', text: ''});
       return 0;
     }
-    console.log(rut);
     if(rut !== 0){
       this.setState({rutInputClassName: 'validate valid'});
     }
@@ -58,39 +56,29 @@ class Login extends Component {
   }
 
   async onClickLogin(){
-    this.validateExistenceAndLength();
-    console.log('aqui1');
-    const rut = this.formatAndValidateRut(this.props.formData.rut); //Return 0 -> invalid Rut //Return formated Rut --> valid Rut
-    if(rut !== 0){
-      console.log('aqui2');
-      this.props.formError({formId:'login', err:''});
-      const credentials = {rut: rut, password:this.props.formData.password};
-      this.setState({showProgressBar: true});
-      await this.props.loginUser(credentials);
-      this.setState({showProgressBar: false});
-      //TODO: Redireccion de path ¿aqui o en la action ?
-      console.log(this.props.userData);
+    var allOK = true;
+    allOK = this.validateExistenceAndLength(this.props.formData.rut, 'rutInputClassName' , 32);
+    allOK = this.validateExistenceAndLength(this.props.formData.password, 'passwordInputClassName' , 32);
+    if(allOK){
+      const rut = this.formatAndValidateRut(this.props.formData.rut); //Return 0 -> invalid Rut //Return formated Rut --> valid Rut
+      if(rut !== 0){
+        this.props.formError({formId:'login', err:''});
+        const credentials = {rut: rut, password:this.props.formData.password};
+        this.setState({showProgressBar: true});
+        await this.props.loginUser(credentials);
+        this.setState({showProgressBar: false});
+        //TODO: Redireccion de path ¿aqui o en la action ?
+        console.log(this.props.userData);
+      }
     }
   }
 
-  validateExistenceAndLength(){
-    var errCount = 0;
-    if(this.props.formData.password === '' || this.props.formData.password.length > 32){
-      errCount++;
-      this.setState({passwordInputClassName: 'validate invalid'});
-    }else{
-      this.setState({passwordInputClassName: 'validate valid'});
-    }
-    if(this.props.formData.rut === '' || this.props.formData.rut.length > 32){
-      errCount++;
-      this.setState({rutInputClassName: 'validate invalid'});
-    }else{
-      console.log('c');
-      this.setState({rutInputClassName: 'validate valid'});
-    }
-    if(errCount !== 0){
+  validateExistenceAndLength(formData, errStateVarName, maxLength){
+    if(formData === '' || formData.length > maxLength){
+      this.setState({[errStateVarName]: 'validate invalid'});
       return false;
     }else{
+      this.setState({[errStateVarName]: 'validate valid'});
       return true;
     }
   }

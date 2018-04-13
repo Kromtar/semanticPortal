@@ -8,6 +8,18 @@ var defaultValues = {
     rut: '',
     password: '',
     err: ''
+  },
+  newAccount: {
+    name: '',
+    surname: '',
+    newRut: '',
+    mail: '',
+    age: '',
+    newPassword: '',
+    newPasswordVer: '',
+    gender:'',
+    interest: [],
+    err: ''
   }
 }
 
