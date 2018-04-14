@@ -4,8 +4,14 @@ const bcrypt = require('bcrypt-nodejs');
 
 //TODO: Agregar campos de usuario
 const userSchema = new Schema({
-  rut: String,
-  password: String,
+  rut: { type: String, unique: true },
+  name: String,
+  surname: String,
+  age: Number,
+  gender: String,
+  mail: String,
+  interest: [String],
+  password: String
 });
 
 userSchema.methods.generateHash = function (password) {

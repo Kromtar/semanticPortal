@@ -8,6 +8,7 @@ import Modal from 'react-responsive-modal';
 //TODO: realizar despliegue y analisis de campos con un for y array
 //TODO: Modularizar
 //TODO: Agregar capcha
+//TODO: Icono para cerra select o moverlo
 
 class NewAccountModal extends Component {
 
@@ -20,7 +21,8 @@ class NewAccountModal extends Component {
     newPasswordInputClassName: 'validate',
     newPasswordVerInputClassName: 'validate',
     surnameSignatureInputClassName: 'validate',
-    step: 1
+    step: 1,
+    showProgressBar: false,
   }
 
   componentDidMount() {
@@ -46,7 +48,8 @@ class NewAccountModal extends Component {
       newPasswordInputClassName: 'validate',
       newPasswordVerInputClassName: 'validate',
       surnameSignatureInputClassName: 'validate',
-      step: 1
+      step: 1,
+      showProgressBar: false,
     });
     this.props.formClear({formId: 'newAccount'});
   }
@@ -201,7 +204,7 @@ class NewAccountModal extends Component {
   renderErr(){
     if(this.props.formData.err !== ''){
       return (
-        <div className='col s12 center-align red'>
+        <div className='row noMargin center-align red'>
           {this.props.formData.err}
         </div>
       );
@@ -228,11 +231,38 @@ class NewAccountModal extends Component {
   }
 
 
-  processNewUser(){
+  async processNewUser(){
     if(this.validateSignatue(this.props.formData.surnameSignature, this.props.formData.surname)){
-      console.log('ok');
+      this.setState({showProgressBar: true});
+      var res = await this.props.createNewUser(this.props.formData);
+      this.setState({showProgressBar: false});
+      if(res){
+        console.log('OK');
+      }else{
+        this.props.formError({formId:'newAccount', err:'Error, puede ser que ya tengas una cuenta. Intenta otra vez'});
+      }
     }
-    console.log('nop');
+  }
+
+  renderProsgressBar(){
+    if(this.state.showProgressBar){
+      return(
+        <div className="progress s6 offset-s3" style={{marginTop: '14px'}}>
+          <div className="indeterminate"></div>
+        </div>
+      );
+    }else{
+      return(
+        <div className="row noMargin" style={{marginTop: '24px'}}>
+          <div className='col s6 center-align'>
+            <a onClick={() => this.onCloseModal()} className="waves-effect btn-flat blue-grey lighten-2">Cancelar</a>
+          </div>
+          <div className='col s6 center-align'>
+            <a onClick={() => this.processNewUser()} className="waves-effect btn light-green darken-4">Acepto las condiciones</a>
+          </div>
+        </div>
+      );
+    }
   }
 
   renderContent(){
@@ -310,6 +340,8 @@ class NewAccountModal extends Component {
 
           {this.renderErr()}
 
+          <div className="divider row noMargin"/>
+
           <div className="row noMargin" style={{marginTop: '24px'}}>
             <div className='col s6 center-align'>
               <a onClick={() => this.onCloseModal()} className="waves-effect btn-flat blue-grey lighten-2">Cancelar</a>
@@ -323,7 +355,7 @@ class NewAccountModal extends Component {
     }else if(this.state.step === 2){
       return (
         <div>
-          <div className="row">
+          <div className="row noMargin">
 
             <div className="col s12">
               Aqui va el contrato
@@ -340,15 +372,10 @@ class NewAccountModal extends Component {
 
           {this.renderErr()}
 
-          <div className="row noMargin" style={{marginTop: '24px'}}>
-            <div className='col s6 center-align'>
-              <a onClick={() => this.onCloseModal()} className="waves-effect btn-flat blue-grey lighten-2">Cancelar</a>
-            </div>
-            <div className='col s6 center-align'>
-              <a onClick={() => this.processNewUser()} className="waves-effect btn light-green darken-4">Acepto las condiciones</a>
-            </div>
+          <div className="divider row noMargin"/>
 
-          </div>
+          {this.renderProsgressBar()}
+
         </div>
       );
     }else{
@@ -369,8 +396,8 @@ class NewAccountModal extends Component {
           closeOnEsc={false}
           onClose={() => this.onCloseModal()}
         >
-          <div className="row">
-            Titulo
+          <div className="row noMargin">
+            <h5>Necesitamos algunos de tus datos</h5>
           </div>
 
           {this.renderContent()}

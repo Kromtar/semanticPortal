@@ -116,7 +116,7 @@ class Login extends Component {
   renderErr(){
     if(this.props.formData.err !== ''){
       return (
-        <div className='col s12 center-align'>
+        <div className='row noMargin center-align'>
           {this.props.formData.err}
         </div>
       );
@@ -155,7 +155,7 @@ class Login extends Component {
 
                 {this.renderErr()}
 
-                <div className="divider"/>
+                <div className="divider row noMargin"/>
 
                 {this.renderProsgressBar()}
 

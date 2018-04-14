@@ -4,6 +4,8 @@ const jwt = require('../services/jwt');
 const User = mongoose.model('users');
 
 //TODO: Es necesario tener proteccion ante DDOS
+//TODO: Implementar reCaptcha
+//TODO: Implementar HTTPS
 
 //Crea un nuevo usuario
 //TODO: Es necesario validar toda la informacion
@@ -12,6 +14,13 @@ async function createUser(req, res) {
   try {
     const user = new User({
       rut: params.rut,
+      name: params.name,
+      surname: params.surname,
+      age: params.age,
+      gender: params.gender,
+      mail: params.mail,
+      interest: params.interest,
+      password: params.password
     });
     user.password = user.generateHash(params.password);
     const newUser = await user.save();
