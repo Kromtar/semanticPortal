@@ -18,6 +18,7 @@ class NewAccountModal extends Component {
     ageInputClassName: 'validate',
     newPasswordInputClassName: 'validate',
     newPasswordVerInputClassName: 'validate',
+    step: 1
   }
 
   componentDidMount() {
@@ -25,8 +26,6 @@ class NewAccountModal extends Component {
   }
 
   componentDidUpdate() {
-    console.log(this.props.formData);
-    console.log(this.state);
   	this.initializeSelect();
   }
 
@@ -35,7 +34,17 @@ class NewAccountModal extends Component {
   }
 
   onCloseModal(){
-    //limpiar los formularios
+    this.setState({
+      nameInputClassName: 'validate',
+      surnameInputClassName: 'validate',
+      newRutInputClassName: 'validate',
+      mailInputClassName: 'validate',
+      ageInputClassName: 'validate',
+      newPasswordInputClassName: 'validate',
+      newPasswordVerInputClassName: 'validate',
+      step: 1
+    });
+    this.props.formClear({formId: 'newAccount'});
     this.props.modalControl({modalId: 'newAccount', state: false});
   }
 
@@ -49,7 +58,7 @@ class NewAccountModal extends Component {
 
   validateExistenceAndLength(formData, errStateVarName, maxLength, minLength){
     var trimedFormData = formData.trim();
-    if(trimedFormData === '' || trimedFormData.length > maxLength || trimedFormData.length <= minLength){
+    if(trimedFormData === '' || trimedFormData.length > maxLength || trimedFormData.length <= minLength || (/\s/.test(trimedFormData)) ){
       this.setState({[errStateVarName]: 'invalid'});
       this.props.formError({formId:'newAccount', err:'Faltan algunos de tus datos'});
       return false;
@@ -127,6 +136,43 @@ class NewAccountModal extends Component {
     return true;
   }
 
+  //No se verifica complejidad de clave
+  validatePassword(password, passwordVer, maxLength, minLength){
+    var errorInValidateExistenceAndLength = false;
+    var passwordTrimed = password.trim();
+    if(passwordTrimed === '' || passwordTrimed.length >= maxLength || passwordTrimed.length <= minLength || (/\s/.test(passwordTrimed)) ){
+      this.setState({newPasswordInputClassName: 'invalid'});
+      errorInValidateExistenceAndLength = true;
+    }
+    var passwordVerTrimed = passwordVer.trim();
+    if(passwordVerTrimed === '' || passwordVerTrimed.length >= maxLength || passwordVerTrimed.length <= minLength || (/\s/.test(passwordVerTrimed)) ){
+      this.setState({newPasswordVerInputClassName: 'invalid'});
+      errorInValidateExistenceAndLength = true;
+    }
+    if(!errorInValidateExistenceAndLength){
+      if(passwordTrimed !== passwordVerTrimed){
+        this.props.formError({formId:'newAccount', err:'Las contraseñas estan mal verificadas'});
+        this.setState({newPasswordInputClassName: 'invalid'});
+        this.setState({newPasswordVerInputClassName: 'invalid'});
+        return false;
+      }
+      this.setState({newPasswordInputClassName: 'valid'});
+      this.setState({newPasswordVerInputClassName: 'valid'});
+      return true;
+    }else{
+      return false;
+    }
+  }
+
+  validateAgeRange(age, min, max){
+    if(age > min && age < max){
+      this.setState({ageInputClassName: 'valid'});
+      return true;
+    }
+    this.setState({ageInputClassName: 'invalid'});
+    return false;
+  }
+
   onClickNext(){
 
     var allOK = true;
@@ -135,28 +181,24 @@ class NewAccountModal extends Component {
     allOK = this.validateExistenceAndLength(this.props.formData.name, 'nameInputClassName' , 32, 2) && allOK ? true : false;
     allOK = this.validateExistenceAndLength(this.props.formData.surname, 'surnameInputClassName' , 32, 2) && allOK ? true : false;
     allOK = this.validateExistenceAndLength(this.props.formData.age, 'ageInputClassName' , 32, 1) && allOK ? true : false;
+    allOK = this.validateAgeRange(this.props.formData.age, 5, 105) && allOK ? true : false;
     allOK = this.validateRut(this.props.formData.newRut) && allOK ? true : false;
     allOK = this.validateExistenceAndLength(this.props.formData.mail, 'mailInputClassName' , 32, 5) && allOK ? true : false;
     allOK = this.validateEmail(this.props.formData.mail) && allOK ? true : false;
-    allOK = this.validateExistenceAndLength(this.props.formData.newPassword, 'newPasswordInputClassName' , 32, 4) && allOK ? true : false;
-    allOK = this.validateExistenceAndLength(this.props.formData.newPasswordVer, 'newPasswordVerInputClassName' , 32, 4) && allOK ? true : false;
-
-    //validar claves
+    allOK = this.validatePassword(this.props.formData.newPassword, this.props.formData.newPasswordVer, 32, 4) && allOK ? true : false;
 
     //dejar en minusca nombre y apeelido al enviar
     //quitar espacios al inicio y final en nombre, apellido, mail, rut, password y edad al enviar
     if(allOK){
       this.props.formError({formId:'newAccount', err:''});
-      console.log('ok');
-    }else{
-      console.log('nop');
+      this.setState({step: 2});
     }
   }
 
   renderErr(){
     if(this.props.formData.err !== ''){
       return (
-        <div className='col s12 center-align red' style={{marginBottom: '5px'}}>
+        <div className='col s12 center-align red'>
           {this.props.formData.err}
         </div>
       );
@@ -167,22 +209,10 @@ class NewAccountModal extends Component {
     }
   }
 
-  render(){
-
-    console.log(this.state);
-
-    return(
-      <div>
-        <Modal
-          open={this.props.modalState}
-          //showCloseIcon={false}
-          closeOnOverlayClick={false}
-          closeOnEsc={false}
-          onClose={() => this.onCloseModal()}
-        >
-          <div className="row">
-            Titulo
-          </div>
+  renderContent(){
+    if(this.state.step === 1){
+      return (
+        <div>
           <div className="row">
 
             <div className="col s6">
@@ -254,9 +284,46 @@ class NewAccountModal extends Component {
 
           {this.renderErr()}
 
-          <div className="row">
-            <a onClick={() => this.onClickNext()} className="waves-effect btn light-green darken-4">TEST</a>
+          <div className="row noMargin" style={{marginTop: '24px'}}>
+            <div className='col s6 center-align'>
+              <a onClick={() => this.onCloseModal()} className="waves-effect btn-flat blue-grey lighten-2">Cancelar</a>
+            </div>
+            <div className='col s6 center-align'>
+              <a onClick={() => this.onClickNext()} className="waves-effect btn light-green darken-4">Siguiente</a>
+            </div>
           </div>
+        </div>
+      );
+    }else if(this.state.step === 2){
+      return (
+        <div>
+          CONSENTIMIENTO
+        </div>
+      );
+    }else{
+      return (
+        <div/>
+      );
+    }
+  }
+
+  render(){
+
+    return(
+      <div>
+        <Modal
+          open={this.props.modalState}
+          showCloseIcon={false}
+          closeOnOverlayClick={false}
+          closeOnEsc={false}
+          onClose={() => this.onCloseModal()}
+        >
+          <div className="row">
+            Titulo
+          </div>
+
+          {this.renderContent()}
+
         </Modal>
       </div>
     );

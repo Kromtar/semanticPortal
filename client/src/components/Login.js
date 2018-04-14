@@ -94,7 +94,14 @@ class Login extends Component {
       return (
         <div className="row noMargin" style={{marginTop: '24px'}}>
           <div className='col s6 center-align'>
-            <a onClick={() => this.props.modalControl({modalId: 'newAccount', state: true})} className="waves-effect btn-flat blue-grey lighten-2">Crear cuenta</a>
+            <a
+              onClick={() => {
+                this.props.formClear({formId: 'login'});
+                this.props.modalControl({modalId: 'newAccount', state: true})
+              }}
+              className="waves-effect btn-flat blue-grey lighten-2">
+              Crear cuenta
+            </a>
           </div>
           <div className='col s6 center-align'>
             <a onClick={() => this.onClickLogin()} className="waves-effect btn light-green darken-4">Entrar</a>

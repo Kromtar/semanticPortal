@@ -1,4 +1,4 @@
-import { FORM_INPUT, FORM_ERR } from '../actions/types';
+  import { FORM_INPUT, FORM_ERR, FORM_CLEAR } from '../actions/types';
 import update from 'react-addons-update';
 
 
@@ -31,6 +31,9 @@ export default function(state = defaultValues, action) {
       return newState;
     case FORM_ERR:
       newState = update(state, {[action.payload.formId]: { 'err': {$set: action.payload.err}}});
+      return newState;
+    case FORM_CLEAR:
+      newState = update(state, {[action.payload.formId]: {$set: defaultValues[action.payload.formId]}});
       return newState;
     default:
       return state;
