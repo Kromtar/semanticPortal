@@ -5,11 +5,10 @@ import * as actions from '../actions';
 
 import NewAccountModal from './NewAccountModal';
 
-//TODO: Se podria manejar las form con states de cl clase
+//TODO: Se podria manejar las form con states de la clase
+//TODO: Modularizar
 
 class Login extends Component {
-
-  //TODO: ERROR AL INGRESAR CKAVE Y 2 VECES RUT CON COLOR switch. Actualizar el metodo para validar
 
   state = {
     rutInputClassName: 'validate',
@@ -22,15 +21,15 @@ class Login extends Component {
   }
 
   formatAndValidateRut(rut){
-    var valor = rut.replace('.','');
+    var rutTrimed = rut.trim();
+    var valor = rutTrimed.replace(/\./g,'');
     valor = valor.replace('-','');
     var cuerpo = valor.slice(0,-1);
     var dv = valor.slice(-1).toUpperCase();
-    rut = cuerpo + '-'+ dv
+    rutTrimed = cuerpo + '-'+ dv
     if(cuerpo.length < 7) {
       this.props.formError({formId:'login', err:'Rut no valido'});
-      this.setState({rutInputClassName: 'validate invalid'});
-      //this.props.formInput({formId:'login', inputId:'rut', text: ''});
+      this.setState({rutInputClassName: 'invalid'});
       return 0;
     }
     var suma = 0;
@@ -45,40 +44,43 @@ class Login extends Component {
     dv = (dv == 0)?11:dv;
     if(dvEsperado != dv) {
       this.props.formError({formId:'login', err:'Rut no valido'});
-      this.setState({rutInputClassName: 'validate invalid'});
-      //this.props.formInput({formId:'login', inputId:'rut', text: ''});
+      this.setState({rutInputClassName: 'invalid'});
       return 0;
     }
-    if(rut !== 0){
-      this.setState({rutInputClassName: 'validate valid'});
-    }
-    return rut;
+    return rutTrimed;
   }
 
   async onClickLogin(){
     var allOK = true;
-    allOK = this.validateExistenceAndLength(this.props.formData.rut, 'rutInputClassName' , 32);
-    allOK = this.validateExistenceAndLength(this.props.formData.password, 'passwordInputClassName' , 32);
-    if(allOK){
-      const rut = this.formatAndValidateRut(this.props.formData.rut); //Return 0 -> invalid Rut //Return formated Rut --> valid Rut
-      if(rut !== 0){
-        this.props.formError({formId:'login', err:''});
-        const credentials = {rut: rut, password:this.props.formData.password};
-        this.setState({showProgressBar: true});
-        await this.props.loginUser(credentials);
-        this.setState({showProgressBar: false});
-        //TODO: Redireccion de path ¿aqui o en la action ?
-        console.log(this.props.userData);
+    allOK = this.validateExistenceAndLength(this.props.formData.rut, 'rutInputClassName' , 32, 3) && allOK ? true : false;
+    const rut = this.formatAndValidateRut(this.props.formData.rut); //Return 0 -> invalid Rut //Return formated Rut --> valid Rut
+    allOK = this.validateExistenceAndLength(this.props.formData.password, 'passwordInputClassName' , 32, 3)&& allOK ? true : false;
+    if(allOK && rut !== 0){
+      var res;
+      this.setState({rutInputClassName: 'valid'});
+      this.props.formError({formId:'login', err:''});
+      const credentials = {rut: rut.trim(), password:this.props.formData.password.trim()};
+      this.setState({showProgressBar: true});
+      res = await this.props.loginUser(credentials);
+      this.setState({showProgressBar: false});
+      if(res){
+        this.setState({rutInputClassName: 'valid'});
+        this.setState({passwordInputClassName: 'valid'});
+        console.log('OK');
+      }else{
+        this.setState({rutInputClassName: 'invalid'});
+        this.setState({passwordInputClassName: 'invalid'});
       }
     }
   }
 
-  validateExistenceAndLength(formData, errStateVarName, maxLength){
-    if(formData === '' || formData.length > maxLength){
-      this.setState({[errStateVarName]: 'validate invalid'});
+  validateExistenceAndLength(formData, errStateVarName, maxLength, minLength){
+    var trimedFormData = formData.trim();
+    if(trimedFormData === '' || trimedFormData.length > maxLength || trimedFormData.length <= minLength || (/\s/.test(trimedFormData)) ){
+      this.setState({[errStateVarName]: 'invalid'});
       return false;
     }else{
-      this.setState({[errStateVarName]: 'validate valid'});
+      this.setState({[errStateVarName]: 'valid'});
       return true;
     }
   }

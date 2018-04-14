@@ -19,6 +19,7 @@ var defaultValues = {
     newPasswordVer: '',
     gender:'',
     interest: [],
+    surnameSignature: '',
     err: ''
   }
 }

@@ -7,6 +7,7 @@ import Modal from 'react-responsive-modal';
 //TODO: Se podria manejar la info de las forms con los states de la clase
 //TODO: realizar despliegue y analisis de campos con un for y array
 //TODO: Modularizar
+//TODO: Agregar capcha
 
 class NewAccountModal extends Component {
 
@@ -18,6 +19,7 @@ class NewAccountModal extends Component {
     ageInputClassName: 'validate',
     newPasswordInputClassName: 'validate',
     newPasswordVerInputClassName: 'validate',
+    surnameSignatureInputClassName: 'validate',
     step: 1
   }
 
@@ -34,6 +36,7 @@ class NewAccountModal extends Component {
   }
 
   onCloseModal(){
+    this.props.modalControl({modalId: 'newAccount', state: false});
     this.setState({
       nameInputClassName: 'validate',
       surnameInputClassName: 'validate',
@@ -42,10 +45,10 @@ class NewAccountModal extends Component {
       ageInputClassName: 'validate',
       newPasswordInputClassName: 'validate',
       newPasswordVerInputClassName: 'validate',
+      surnameSignatureInputClassName: 'validate',
       step: 1
     });
     this.props.formClear({formId: 'newAccount'});
-    this.props.modalControl({modalId: 'newAccount', state: false});
   }
 
   onChangeInput(inputId){
@@ -107,7 +110,7 @@ class NewAccountModal extends Component {
 
   validateRut(rut){
     var rutTrimed = rut.trim();
-    var valor = rutTrimed.replace('.','');
+    var valor = rutTrimed.replace(/\./g,'');
     valor = valor.replace('-','');
     var cuerpo = valor.slice(0,-1);
     var dv = valor.slice(-1).toUpperCase();
@@ -209,6 +212,29 @@ class NewAccountModal extends Component {
     }
   }
 
+  validateSignatue(signature, surname){
+    var signatureTrimed = signature.trim();
+    signatureTrimed = signatureTrimed.toLowerCase();
+    var surnameTrimed = surname.trim();
+    surnameTrimed = surnameTrimed.toLowerCase();
+    if(signatureTrimed === surnameTrimed){
+      this.props.formError({formId:'newAccount', err:''});
+      this.setState({surnameSignatureInputClassName: 'valid'});
+      return true;
+    }
+    this.props.formError({formId:'newAccount', err:'Esta mal firmado'});
+    this.setState({surnameSignatureInputClassName: 'invalid'});
+    return false;
+  }
+
+
+  processNewUser(){
+    if(this.validateSignatue(this.props.formData.surnameSignature, this.props.formData.surname)){
+      console.log('ok');
+    }
+    console.log('nop');
+  }
+
   renderContent(){
     if(this.state.step === 1){
       return (
@@ -297,7 +323,32 @@ class NewAccountModal extends Component {
     }else if(this.state.step === 2){
       return (
         <div>
-          CONSENTIMIENTO
+          <div className="row">
+
+            <div className="col s12">
+              Aqui va el contrato
+            </div>
+
+            <div className="col s12">
+              <div className="input-field">
+                <input value={this.props.formData.surnameSignature} onChange={() => this.onChangeInput('surnameSignature')} id="surnameSignature" type="text" className={this.state.surnameSignatureInputClassName}/>
+                <label htmlFor="surnameSignature">Escribe tu apellido para firmar las condiciones</label>
+              </div>
+            </div>
+
+          </div>
+
+          {this.renderErr()}
+
+          <div className="row noMargin" style={{marginTop: '24px'}}>
+            <div className='col s6 center-align'>
+              <a onClick={() => this.onCloseModal()} className="waves-effect btn-flat blue-grey lighten-2">Cancelar</a>
+            </div>
+            <div className='col s6 center-align'>
+              <a onClick={() => this.processNewUser()} className="waves-effect btn light-green darken-4">Acepto las condiciones</a>
+            </div>
+
+          </div>
         </div>
       );
     }else{
