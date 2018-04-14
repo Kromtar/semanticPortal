@@ -237,7 +237,8 @@ class NewAccountModal extends Component {
       var res = await this.props.createNewUser(this.props.formData);
       this.setState({showProgressBar: false});
       if(res){
-        console.log('OK');
+        this.props.formError({formId:'login', err:'Tu cuenta ya esta creada'});
+        this.onCloseModal();
       }else{
         this.props.formError({formId:'newAccount', err:'Error, puede ser que ya tengas una cuenta. Intenta otra vez'});
       }
