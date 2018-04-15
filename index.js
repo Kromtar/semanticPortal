@@ -7,7 +7,7 @@ const autoIncrement = require('mongoose-auto-increment');
 //TODO: Agregar HTTPS
 //TODO: Control de ddos
 //TODO: Capcha al crear cuenta (y hacer login ?)
-//TODO: JWT: HttpOnly
+//TODO: JWT: HttpOnly y otros metodos de seguridad
 
 mongoose.Promise = global.Promise;
 const app = express();
@@ -60,3 +60,4 @@ require('./models/ExpA_Pauses');
 //añadir rutas http
 require('./routes/authRoutes')(app);
 require('./routes/userRoutes')(app);
+require('./routes/roomRoutes')(app);

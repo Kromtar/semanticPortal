@@ -3,7 +3,8 @@ import jwtDecode from 'jwt-decode';
 
 import {
   LOAD_TOKEN,
-  FORM_ERR
+  FORM_ERR,
+  LOAD_USERID
 } from './types';
 
 export const loginUser = (credentials) => async (dispatch) => {
@@ -12,8 +13,9 @@ export const loginUser = (credentials) => async (dispatch) => {
 
   try {
     const res = await axios.post('/api/loginUser', credentials);
-    const decodeToken = jwtDecode(res.data.token); //Aqui podemos sacar el id el usuario
+    const decodeToken = jwtDecode(res.data.token);
     dispatch({ type: LOAD_TOKEN, payload: res.data.token });
+    dispatch({ type: LOAD_USERID, payload: decodeToken.id});
     return true;
   } catch (err) {
     dispatch({ type: FORM_ERR, payload: {formId:'login', err:'Error en el login'}});
@@ -44,7 +46,7 @@ export const createNewUser = (userData) => async (dispatch) => {
     gender: userData.gender,
     interest: userData.interest
   };
-  
+
   try {
     const res = await axios.post('/api/createUser', data);
     return true;

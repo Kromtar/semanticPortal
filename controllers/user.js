@@ -3,12 +3,8 @@ const jwt = require('../services/jwt');
 
 const User = mongoose.model('users');
 
-//TODO: Es necesario tener proteccion ante DDOS
-//TODO: Implementar reCaptcha
-//TODO: Implementar HTTPS
-
 //Crea un nuevo usuario
-//TODO: Es necesario validar toda la informacion
+//TODO: Es necesario validar toda la informacion (en caso de no bloquear la IP de la API)
 async function createUser(req, res) {
   const params = req.body;
   try {
@@ -49,9 +45,12 @@ async function loginUser(req, res) {
         }else{
           res.status(200).send({});
         }
+      }else{
+        res.status(401).send(err);
       }
+    }else{
+      res.status(401).send(err);
     }
-    res.status(401).send(err);
   } catch(err){
     res.status(404).send(err);
   }

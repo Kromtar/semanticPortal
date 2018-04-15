@@ -21,6 +21,10 @@ var defaultValues = {
     interest: [],
     surnameSignature: '',
     err: ''
+  },
+  roomSelector: {
+    room: '',
+    err:''
   }
 }
 

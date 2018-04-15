@@ -8,6 +8,7 @@ const expatestSchema = new Schema({
   _stateofwords: { type: Schema.Types.ObjectId, ref: 'exp_a_stateofwords' },
   _rounds: [{ type: Schema.Types.ObjectId, ref: 'exp_a_rounds' }],
   _pauses: { type: Schema.Types.ObjectId, ref: 'exp_a_pauses' },
+  _experiment: { type: Schema.Types.ObjectId, ref: 'experiments' },
 });
 
 mongoose.model('exp_a_tests', expatestSchema);

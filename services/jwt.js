@@ -5,6 +5,7 @@ exports.createToken = function (user) {
   const payload = {
     rut: user.rut,
     id: user._id,
+    name: user.name,
     iat: moment().unix(),
     exp: moment().add(10, 'days').unix()
   };

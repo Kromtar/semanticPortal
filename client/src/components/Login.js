@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import $ from 'jquery';
 import * as actions from '../actions';
+import { Redirect } from 'react-router-dom';
 
 import NewAccountModal from './NewAccountModal';
 
@@ -62,12 +63,8 @@ class Login extends Component {
       const credentials = {rut: rut.trim(), password:this.props.formData.password.trim()};
       this.setState({showProgressBar: true});
       res = await this.props.loginUser(credentials);
-      this.setState({showProgressBar: false});
-      if(res){
-        this.setState({rutInputClassName: 'valid'});
-        this.setState({passwordInputClassName: 'valid'});
-        console.log('OK');
-      }else{
+      if(!res){
+        this.setState({showProgressBar: false});
         this.setState({rutInputClassName: 'invalid'});
         this.setState({passwordInputClassName: 'invalid'});
       }
@@ -128,6 +125,11 @@ class Login extends Component {
   }
 
   render(){
+
+    if(this.props.application.userLogIn){
+      return <Redirect to='/portal' />
+    }
+
     return(
       <div>
 
@@ -172,6 +174,7 @@ function mapStateToProps(state){
   return {
     formData: state.forms.login,
     userData: state.user,
+    application: state.application,
   };
 };
 

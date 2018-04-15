@@ -4,10 +4,12 @@ import test from './test';
 import forms from './forms';
 import user from './user';
 import application from './application';
+import expAlpha from './expAlpha';
 
 export default combineReducers({
   test: test,
   forms: forms,
   user: user,
-  application: application
+  application: application,
+  expAlpha: expAlpha
 });
