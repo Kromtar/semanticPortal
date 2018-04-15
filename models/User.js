@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 const bcrypt = require('bcrypt-nodejs');
 
-//TODO: Agregar campos de usuario
 const userSchema = new Schema({
   rut: { type: String, unique: true },
   name: String,

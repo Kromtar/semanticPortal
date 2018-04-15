@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const autoIncrement = require('mongoose-auto-increment');
 
 //TODO: Agregar HTTPS
 //TODO: Control de ddos
@@ -10,9 +11,6 @@ const bodyParser = require('body-parser');
 
 mongoose.Promise = global.Promise;
 const app = express();
-
-//añadir modelos de mongodb
-require('./models/User');
 
 //Control de acceso
 app.use((req, res, next) => {
@@ -29,10 +27,6 @@ app.use((req, res, next) => {
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-//añadir rutas http
-require('./routes/authRoutes')(app);
-require('./routes/userRoutes')(app);
-
 //Bypass para cliente
 app.use(express.static('client/build'));
 const path = require('path');
@@ -41,7 +35,7 @@ app.get('*', (req, res) => {
 });
 
 //Inicio de servicios
-mongoose.connect(process.env.MONGODBURI, {}, (err) => {
+const connection = mongoose.connect(process.env.MONGODBURI, {}, (err) => {
   if (err) {
     throw err;
   } else {
@@ -52,3 +46,17 @@ mongoose.connect(process.env.MONGODBURI, {}, (err) => {
     });
   }
 });
+
+autoIncrement.initialize(connection);
+
+//añadir modelos de mongodb
+require('./models/User');
+require('./models/Experiment');
+require('./models/ExpA_Test');
+require('./models/ExpA_RoundAndRelation');
+require('./models/ExpA_StateOfWords');
+require('./models/ExpA_Pauses');
+
+//añadir rutas http
+require('./routes/authRoutes')(app);
+require('./routes/userRoutes')(app);
