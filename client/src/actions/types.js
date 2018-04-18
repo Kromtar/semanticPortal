@@ -7,3 +7,4 @@ export const MODAL_CONTROL = 'modalCOntrol';
 export const FORM_CLEAR = 'formClear';
 export const EXP_LOAD = 'expLoad';
 export const EXP_LOAD_ALPHA = 'expLoadAlpha';
+export const EXP_A_LOAD_TEST = 'expALoadTest';

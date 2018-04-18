@@ -8,6 +8,7 @@ const autoIncrement = require('mongoose-auto-increment');
 //TODO: Control de ddos
 //TODO: Capcha al crear cuenta (y hacer login ?)
 //TODO: JWT: HttpOnly y otros metodos de seguridad
+//TODO: Autoreconection to mongodb
 
 mongoose.Promise = global.Promise;
 const app = express();
@@ -54,10 +55,12 @@ require('./models/User');
 require('./models/Experiment');
 require('./models/ExpA_Test');
 require('./models/ExpA_RoundAndRelation');
-require('./models/ExpA_StateOfWords');
+require('./models/ExpA_WaitingWords');
 require('./models/ExpA_Pauses');
+require('./models/ExpA_Dictionary');
 
 //añadir rutas http
 require('./routes/authRoutes')(app);
 require('./routes/userRoutes')(app);
 require('./routes/roomRoutes')(app);
+require('./routes/expAlphaRoutes')(app);
