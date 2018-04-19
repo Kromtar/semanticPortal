@@ -6,7 +6,8 @@ class HelpModal extends Component {
   static defaultProps = {
     isOpen: false,
     text: 'default test',
-    showProgress: false
+    showProgress: false,
+    buttonText: ''
   };
 
   onCloseModal(){
@@ -24,7 +25,7 @@ class HelpModal extends Component {
   renderButton(){
     return(
       <div className='col s12 center-align'>
-        <a onClick={() => this.onCloseModal()} className="waves-effect btn light-green darken-4">Entiendo</a>
+        <a onClick={() => this.onCloseModal()} className="waves-effect btn light-green darken-4">{this.props.buttonText}</a>
       </div>
     );
   }

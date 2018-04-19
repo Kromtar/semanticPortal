@@ -15,4 +15,22 @@ module.exports = app => {
     expAlphaController.loadNextWord
   );
 
+  app.post(
+    '/api/initRound',
+    authJwt.ensureAuth,
+    expAlphaController.initRound
+  );
+
+  app.post(
+    '/api/addWordToRelation',
+    authJwt.ensureAuth,
+    expAlphaController.addWordToRelation
+  );
+
+  app.post(
+    '/api/endRound',
+    authJwt.ensureAuth,
+    expAlphaController.endRound
+  );
+
 };

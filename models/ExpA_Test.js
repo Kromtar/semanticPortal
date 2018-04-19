@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
+//TODO: quitar expatestusernumber
+
 const expatestSchema = new Schema({
   _user: { type: Schema.Types.ObjectId, ref: 'users' },
   active: { type: Boolean, default: true },

@@ -25,6 +25,10 @@ var defaultValues = {
   roomSelector: {
     room: '',
     err:''
+  },
+  expA: {
+    mainInput: '',
+    err: ''
   }
 }
 

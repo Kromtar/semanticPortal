@@ -14,8 +14,5 @@ const exparoundSchema = new Schema({
   relation:[exparelationSchema]
 });
 
-exparelationSchema.plugin(autoIncrement.plugin, { model: 'exp_a_relation', field: 'order' });
-exparoundSchema.plugin(autoIncrement.plugin, { model: 'exp_a_rounds', field: 'order' });
-
 mongoose.model('exp_a_relation', exparelationSchema);
 mongoose.model('exp_a_rounds', exparoundSchema);

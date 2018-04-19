@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const Experiments = mongoose.model('experiments');
 
-//TODO: Se podria dejar la id el experimento y posteriormente la del test en al token.
+//TODO: Se podria dejar la id el experimento y posteriormente la del test al token.
 
 async function loadRoom(req, res) {
   try{
