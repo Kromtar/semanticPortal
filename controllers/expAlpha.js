@@ -7,6 +7,7 @@ const ExpA_Tests = mongoose.model('exp_a_tests');
 const ExpA_Dictionary = mongoose.model('exp_a_dictionary');
 const ExpA_Rounds = mongoose.model('exp_a_rounds');
 const ExpA_Relation = mongoose.model('exp_a_relation');
+const ExpA_Pauses = mongoose.model('exp_a_pauses');
 
 //TODO: Falta crear las collection para las pausas
 
@@ -155,10 +156,27 @@ async function endRound(req, res) {
   }
 }
 
+async function addPause(req, res) {
+
+  try{
+    const pause = new ExpA_Pauses({
+      timeIn: new Date(req.body.timeInit),
+      timeOut: new Date(req.body.timeEnd),
+    })
+    const newPause= await pause.save();
+    const testUpdated = await ExpA_Tests.findByIdAndUpdate(req.body.testId,{ $push: { _pauses: newPause._id} });
+    res.status(200).send({});
+  }catch(err){
+    res.status(404).send(err);
+  }
+
+}
+
 module.exports = {
   loadUserTest,
   loadNextWord,
   initRound,
   addWordToRelation,
-  endRound
+  endRound,
+  addPause
 };

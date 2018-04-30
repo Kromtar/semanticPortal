@@ -11,7 +11,7 @@ const exparoundSchema = new Schema({
   word: String,
   finalized: { type: Boolean, default: false },
   date: { type: Date, default: Date.now },
-  relation:[exparelationSchema]
+  relation:[exparelationSchema] //TODO: Poner guion bajo
 });
 
 mongoose.model('exp_a_relation', exparelationSchema);

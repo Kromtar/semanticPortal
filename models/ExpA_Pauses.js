@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const expapauseSchema = new Schema({
-  timeIn: { type: Date, default: Date.now },
+  timeIn: Date,
   timeOut: Date,
 });
 

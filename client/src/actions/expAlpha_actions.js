@@ -80,7 +80,7 @@ export const addRoundWordCount = () => dispatch => new Promise((resolve, reject)
 
 export const sendPauseEvent = (data, token) => async (dispatch) => {
   try{
-    console.log(data);
+    await axios.post('/api/addPause', data, { headers: { authorization: "Bearer " +  token }});
     return true;
   }catch (err) {
     console.log(err);

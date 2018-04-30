@@ -1,6 +1,8 @@
 const authJwt = require('../middlewares/authJwt');
 const expAlphaController = require('../controllers/expAlpha');
 
+//TODO: Actualizar post got
+
 module.exports = app => {
 
   app.post(
@@ -31,6 +33,12 @@ module.exports = app => {
     '/api/endRound',
     authJwt.ensureAuth,
     expAlphaController.endRound
+  );
+
+  app.post(
+    '/api/addPause',
+    authJwt.ensureAuth,
+    expAlphaController.addPause
   );
 
 };
