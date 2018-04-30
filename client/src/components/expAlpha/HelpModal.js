@@ -5,9 +5,9 @@ class HelpModal extends Component {
 
   static defaultProps = {
     isOpen: false,
-    text: 'default test',
-    showProgress: false,
-    buttonText: ''
+    instructionsText: 'default test',
+    loadingMode: false,
+    buttonText: 'salir'
   };
 
   onCloseModal(){
@@ -30,8 +30,8 @@ class HelpModal extends Component {
     );
   }
 
-  buttonOrProgress(){
-    if(this.props.showProgress){
+  renderContent(){
+    if(this.props.loadingMode){
       return this.renderProgressBar();
     }else{
       return this.renderButton();
@@ -52,9 +52,9 @@ class HelpModal extends Component {
         </div>
         <div className="row noMargin">
           <div className='col s12'>
-            {this.props.text}
+            {this.props.instructionsText}
           </div>
-          {this.buttonOrProgress()}
+          {this.renderContent()}
         </div>
       </Modal>
     );

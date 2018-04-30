@@ -5,20 +5,23 @@ import {
   EXP_A_ADD_WORD_LIST,
   EXP_A_LOAD_ROUND,
   EXP_A_CLEAR_WORD_LIST,
-  EXP_A_ADD_ROUND_READY
+  EXP_A_ADD_ROUND_READY,
+  EXP_A_ADD_ROUND_WORD_COUNT,
+  USER_LOG_OUT
 } from '../actions/types';
 import update from 'react-addons-update';
 
 var defaultValues = {
-  parameters: {
+  parameters: {           //Parametros del experimento
     instructions: ''
   },
-  testId: '',
-  wordId: '',
-  actualWord: '',
-  wordInputList: [],
-  roundsComplete: 0,
-  roundId: ''
+  testId: '',             //id del test
+  wordId: '',             //id de la palabra raiz de la ronda
+  actualWord: '',         //palabra raiz de la ronda
+  wordInputList: [],      //cache de palabras de una ronda (Se envia y vacia si llega a 10)
+  roundsComplete: 0,      //contador de rondas completadas
+  roundId: '',            //id de la ronda
+  wordOfRoundCount: 0     //contador de palabras de la ronda actual
 }
 
 export default function(state = defaultValues , action) {
@@ -43,7 +46,13 @@ export default function(state = defaultValues , action) {
       newState = update(state, {wordInputList: {$set: [] }});
       return newState;
     case EXP_A_ADD_ROUND_READY:
-      newState = update(state, {roundsComplete: {$set: state.roundsComplete + 1 }});
+      newState = update(state, {roundsComplete: {$set: state.roundsComplete + 1 }, wordOfRoundCount: {$set:0} });
+      return newState;
+    case EXP_A_ADD_ROUND_WORD_COUNT:
+      newState = update(state, {wordOfRoundCount: {$set: state.wordOfRoundCount + 1 }});
+      return newState;
+    case USER_LOG_OUT:
+      newState = update(state, {$set: defaultValues});
       return newState;
     default:
       return state;

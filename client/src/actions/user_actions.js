@@ -4,7 +4,8 @@ import jwtDecode from 'jwt-decode';
 import {
   LOAD_TOKEN,
   FORM_ERR,
-  LOAD_USERID
+  LOAD_USERID,
+  USER_LOG_OUT
 } from './types';
 
 export const loginUser = (credentials) => async (dispatch) => {
@@ -48,9 +49,13 @@ export const createNewUser = (userData) => async (dispatch) => {
   };
 
   try {
-    const res = await axios.post('/api/createUser', data);
+    await axios.post('/api/createUser', data);
     return true;
   } catch (err) {
     return false;
   }
 };
+
+export const userLogOut = () => dispatch => {
+  dispatch({ type: USER_LOG_OUT, payload: {}});
+}

@@ -6,7 +6,8 @@ import {
   EXP_A_ADD_WORD_LIST,
   EXP_A_LOAD_ROUND,
   EXP_A_CLEAR_WORD_LIST,
-  EXP_A_ADD_ROUND_READY
+  EXP_A_ADD_ROUND_READY,
+  EXP_A_ADD_ROUND_WORD_COUNT
 } from './types';
 
 export const loadUserTest = (data, token) => async (dispatch) => {
@@ -31,7 +32,6 @@ export const loadNewWord = (data, token) => async (dispatch) => {
   }
 }
 
-//TODO: ¿Que pasa si se envia esta peticion 2 veces con la misma palabra? ---> finalized ?
 export const initRound = (data, token) => async (dispatch) => {
   try {
     const res = await axios.post('/api/initRound', data, { headers: { authorization: "Bearer " +  token }});
@@ -43,31 +43,44 @@ export const initRound = (data, token) => async (dispatch) => {
   }
 }
 
-export const addToWordList = (data, listLength) => dispatch => {
-  if(listLength<10){
-    dispatch({ type: EXP_A_ADD_WORD_LIST, payload: data});
-    return false;
-  }else {
-    return true;
-  }
-}
+export const addToWordList = (data) => dispatch => new Promise((resolve, reject) => {
+  dispatch({ type: EXP_A_ADD_WORD_LIST, payload: data});
+  resolve();
+});
 
 export const sendWordList = (data, token) => async (dispatch) => {
   try{
-    const res = await axios.post('/api/addWordToRelation', data, { headers: { authorization: "Bearer " +  token }});
+    if(data.wordList.length === 0){
+      return true;
+    }
+    await axios.post('/api/addWordToRelation', data, { headers: { authorization: "Bearer " +  token }});
     dispatch({ type: EXP_A_CLEAR_WORD_LIST, payload: {} });
     return true;
   }catch (err) {
     console.log(err);
     return false;
   }
-
 }
 
 export const endRound = (data, token) => async (dispatch) => {
   try{
-    const res = await axios.post('/api/endRound', data, { headers: { authorization: "Bearer " +  token }});
+    await axios.post('/api/endRound', data, { headers: { authorization: "Bearer " +  token }});
     dispatch({ type: EXP_A_ADD_ROUND_READY, payload: {} });
+    return true;
+  }catch (err) {
+    console.log(err);
+    return false;
+  }
+}
+
+export const addRoundWordCount = () => dispatch => new Promise((resolve, reject) => {
+  dispatch({ type: EXP_A_ADD_ROUND_WORD_COUNT, payload: {}});
+  resolve();
+});
+
+export const sendPauseEvent = (data, token) => async (dispatch) => {
+  try{
+    console.log(data);
     return true;
   }catch (err) {
     console.log(err);

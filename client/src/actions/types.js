@@ -13,3 +13,5 @@ export const EXP_A_ADD_WORD_LIST = 'expAAddWordList';
 export const EXP_A_LOAD_ROUND = 'expaloadround';
 export const EXP_A_CLEAR_WORD_LIST = 'expaclearwordlist';
 export const EXP_A_ADD_ROUND_READY = 'expaaddroundready';
+export const EXP_A_ADD_ROUND_WORD_COUNT = 'expaaddroundwordcount';
+export const USER_LOG_OUT = 'userLogOut';
