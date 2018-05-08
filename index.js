@@ -42,8 +42,8 @@ const connection = mongoose.connect(process.env.MONGODBURI, {}, (err) => {
     throw err;
   } else {
     console.log('MongoDb conection OK');
-    app.listen(process.env.SERVERPORT, () => {
-      console.log('Server ON, port:', process.env.SERVERPORT);
+    app.listen(process.env.PORT, () => {
+      console.log('Server ON, port:', process.env.PORT);
       console.log('The environment is', process.env.NODE_ENV);
     });
   }
