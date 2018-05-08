@@ -2,10 +2,11 @@ const jwt = require('jwt-simple');
 const moment = require('moment');
 
 exports.createToken = function (user) {
+  const { rut, _id: id, name } = user;
   const payload = {
-    rut: user.rut,
-    id: user._id,
-    name: user.name,
+    rut,
+    id,
+    name,
     iat: moment().unix(),
     exp: moment().add(10, 'days').unix()
   };

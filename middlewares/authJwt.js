@@ -13,7 +13,7 @@ exports.ensureAuth = function (req, res, next) {
 
   try {
     const payload = jwt.decode(token, secret);
-    req.user = payload;
+    req.user = payload; //TODO: Se puede ocupar res.locals
     if (payload.exp <= moment().unix()) {
       return res.status(401).send({ message: 'Expired Token' });
     }

@@ -3,6 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const autoIncrement = require('mongoose-auto-increment');
+const path = require('path');
 
 //TODO: Agregar HTTPS
 //TODO: Control de ddos
@@ -31,7 +32,6 @@ app.use(bodyParser.json());
 
 //Bypass para cliente
 app.use(express.static('client/build'));
-const path = require('path');
 app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
 });

@@ -4,7 +4,6 @@ const expAlphaController = require('../controllers/expAlpha');
 //TODO: Actualizar post got
 
 module.exports = app => {
-
   app.post(
     '/api/loadUserTest',
     authJwt.ensureAuth,
@@ -40,5 +39,4 @@ module.exports = app => {
     authJwt.ensureAuth,
     expAlphaController.addPause
   );
-
 };

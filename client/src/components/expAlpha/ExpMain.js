@@ -118,14 +118,32 @@ class ExpMain extends Component {
   }
 
   //Click de entrar palabra
-  //TODO: validar
   async handleKeyPress(input){
     if(input.key==='Enter' && !this.state.enterKeyLocked){
       var time = new Date();
+
+      //validar y deja en formato palabras
+      var specialChars = "!@#$^&%*()+=-[]\/{}|:<>?,.";
+      var inputValidate = this.props.formData.mainInput.trim();
+      for (var i = 0; i < specialChars.length; i++) {
+        inputValidate = inputValidate.replace(new RegExp("\\" + specialChars[i], 'gi'), '');
+      }
+      if(inputValidate === ''){
+        this.props.formClear({formId: 'expA'});
+        this.nameInput.focus();
+        return;
+      }
+      inputValidate = inputValidate.toLowerCase();
+      inputValidate = inputValidate.replace(/á/gi,"a");
+      inputValidate = inputValidate.replace(/é/gi,"e");
+      inputValidate = inputValidate.replace(/í/gi,"i");
+      inputValidate = inputValidate.replace(/ó/gi,"o");
+      inputValidate = inputValidate.replace(/ú/gi,"u");
+
       //Se añade la palabra al cache. Retorna true si el cache esta lleno
       console.log('primero');
       await this.props.addToWordList(
-        {word: this.props.formData.mainInput, time: time.toISOString()}
+        {word: inputValidate, time: time.toISOString()}
       );
       //Si la lista ya tiene 10 palabras, se envia el cache
       console.log('segundo');
@@ -232,6 +250,8 @@ class ExpMain extends Component {
   }
 
   render(){
+
+    console.log(this.props.expAlpha);
 
     //Redireccion en caso de error
     if(this.state.errorOnTest || this.state.endExp){

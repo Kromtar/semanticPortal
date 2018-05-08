@@ -12,5 +12,4 @@ module.exports = app => {
    '/api/loginUser',
    UserController.loginUser
  );
- 
 };
