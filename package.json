@@ -1,13 +1,13 @@
 {
   "name": "semanticportal",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.0.1",
+  "description": "Web portal for semantic network experiment. Adolfo Ibañez University",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
     "startDev": "cross-env NODE_ENV=development nodemon index.js"
   },
-  "author": "",
+  "author": "Federico Jensen (Kromtar)",
   "license": "ISC",
   "dependencies": {
     "async-foreach": "^0.1.3",
