@@ -60,7 +60,7 @@ class EndRoundModal extends Component {
         closeOnEsc={false}
         onClose={() => this.onCloseModal()}
       >
-        <div className="row center-align noMargin">
+        <div className="row center-align noMargin" style={{whith: '800px'}}>
           {this.renderContent()}
         </div>
       </Modal>
