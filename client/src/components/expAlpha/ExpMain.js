@@ -82,6 +82,7 @@ class ExpMain extends Component {
   //Cuando se cierra el modal de ayuda
   async onCloseHelpModal(){
     //En caso de ser el inicio del experimento
+    this.setState({showHelpModal: false});
     if(this.state.fristRound){
       this.initRound();
       this.setState({fristRound: false});
@@ -98,7 +99,6 @@ class ExpMain extends Component {
         return;
       }
     }
-    this.setState({showHelpModal: false});
     this.nameInput.focus();
   }
 
@@ -120,6 +120,7 @@ class ExpMain extends Component {
   //Click de entrar palabra
   async handleKeyPress(input){
     if(input.key==='Enter' && !this.state.enterKeyLocked){
+      this.setState({enterKeyLocked: true});
       var time = new Date();
       //validar y deja en formato palabras
       var specialChars = "!@#$^&%*()+=-[]\/{}|:<>?,.";
@@ -127,8 +128,9 @@ class ExpMain extends Component {
       for (var i = 0; i < specialChars.length; i++) {
         inputValidate = inputValidate.replace(new RegExp("\\" + specialChars[i], 'gi'), '');
       }
-      if(inputValidate === ''){
+      if(inputValidate === '' || inputValidate.length <= 1){
         this.props.formClear({formId: 'expA'});
+        this.setState({enterKeyLocked: false});
         this.nameInput.focus();
         return;
       }
@@ -146,7 +148,6 @@ class ExpMain extends Component {
       //Si la lista ya tiene 10 palabras, se envia el cache
       if(this.props.expAlpha.wordInputList.length >= 10){ //TODO: Valor se puede pasar a parametro
         //TODO: Probar otros metodos para que no se sienta el lag
-        this.setState({enterKeyLocked: true});
         const wordListSaved = await this.props.sendWordList({
           wordList: this.props.expAlpha.wordInputList,
           roundId: this.props.expAlpha.roundId
@@ -164,6 +165,7 @@ class ExpMain extends Component {
         this.setState({nextWordButtonClass: 'waves-effect btn orange lighten-1'});
       }
       this.props.formClear({formId: 'expA'});
+      this.setState({enterKeyLocked: false});
       this.nameInput.focus();
     }
   }
@@ -296,7 +298,7 @@ class ExpMain extends Component {
         <div className='row'>
           <div className='col s6 offset-s3 center-align'>
             <div className='col s6 center-align'>
-              <a onClick={() => this.onClickNextRound()} className={this.state.nextWordButtonClass}>No se me ocurre nada mas</a>
+              <a onClick={() => this.onClickNextRound()} className={this.state.nextWordButtonClass}>No se me ocurren más ideas</a>
             </div>
             <div className='col s6 center-align'>
               <a onClick={() => this.onClickHelpButton()} className="waves-effect btn blue">Ayuda, no entiendo algo</a>

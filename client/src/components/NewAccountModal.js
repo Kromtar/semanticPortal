@@ -308,17 +308,31 @@ class NewAccountModal extends Component {
               </div>
             </div>
 
-            <div className="input-field col s12">
+            <div className="input-field col s6">
               <select id='select' defaultValue={this.props.formData.interest.length === 0 ? ["default"] : this.props.formData.interest} multiple>
                 <option value="default" disabled>Puedes elegir mas de una !</option>
+                <option value="quimica_fisica">Química y Física</option>
+                <option value="negocios_administracion">Negocios y Administración</option>
+                <option value="informatica">Informática</option>
+                <option value="educacion">Educación</option>
+                <option value="ingenieria">Ingeniería</option>
+                <option value="medio_ambiente">Medio ambiente</option>
+                <option value="historia_geografia">Historia y Geografía</option>
                 <option value="leyes">Leyes</option>
+                <option value="literatura">Literatura</option>
                 <option value="medicina">Medicina</option>
+                <option value="filosofia">Filosofía</option>
+                <option value="estudios_religiosos">Estudios religiosos</option>
+                <option value="estadisticas">Estadísticas</option>
                 <option value="agricultura">Agricultura</option>
+                <option value="humanidades_artes">Humanidades y Artes</option>
+                <option value="ciencias_sociales">Ciencias sociales</option>
+                <option value="arquitectura_diseño">Arquitectura y Diseño</option>
+                <option value="psicologia">Psicologia</option>
               </select>
               <label>¿Cuales son tu areas de interés?</label>
             </div>
-
-            <div className="col s12">
+            <div className="col s6">
               <div className="input-field">
                 <input value={this.props.formData.mail} onChange={() => this.onChangeInput('mail')} id="mail" type="text" className={this.state.mailInputClassName}/>
                 <label htmlFor="mail">¿Cual es tu Mail?</label>
@@ -358,14 +372,19 @@ class NewAccountModal extends Component {
         <div>
           <div className="row noMargin">
 
-            <div className="col s12">
-              Aqui va el contrato
+            <div className="col s12 flow-text">
+              <p><b>Consentimiento Informado</b></p>
+              <p>Este experimento se enmarca en el proyecto de investigación “Creatividad y Redes Semánticas” a cargo de la Dra. Alejandra Beghelli de la Universidad Adolfo Ibañez y el Dr. Pablo Prieto de la Universidad Técnica Federico Santa María.</p>
+              <p>En este proyecto investigamos acerca de las características de las redes de asociaciones libres de las personas y su relación con la creatividad y la conexión de conceptos.</p>
+              <p>No hay riesgos asociados a su participación en este experimento.  La información personal (nombre, rut, edad y sexo entre otros) será empleada exclusivamente para fines científicos, resguardando su privacidad y confidencialidad. </p>
+              <p><b>Al escribir su apellido al final del consentimiento Ud. da permiso  al equipo de investigación para analizar los datos que se recolecten durante el experimento.</b> Toda la información producida en esta investigación será tratada de manera confidencial. </p>
+              <p>Usted tiene la libertad de retirarse del experimento cuando lo desee. </p>
+              <p>Para obtener mayor información sobre este estudio, puede contactarse con los investigadores: Alejandra Beghelli, <b>(56-32) 250-3824, alejandra.beghelli@uai.cl</b> o Pablo Prieto, <b>(56-32) 2654-923, pablo.prieto@usm.cl. </b></p>
             </div>
 
             <div className="col s12">
               <div className="input-field">
-                <input value={this.props.formData.surnameSignature} onChange={() => this.onChangeInput('surnameSignature')} id="surnameSignature" type="text" className={this.state.surnameSignatureInputClassName}/>
-                <label htmlFor="surnameSignature">Escribe tu apellido para firmar las condiciones</label>
+                <input value={this.props.formData.surnameSignature} placeholder="Escribe tu apellido para firmar las condiciones" onChange={() => this.onChangeInput('surnameSignature')} id="surnameSignature" type="text" className={this.state.surnameSignatureInputClassName}/>
               </div>
             </div>
 

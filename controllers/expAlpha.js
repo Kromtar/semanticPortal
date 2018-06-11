@@ -66,7 +66,7 @@ async function loadNextWord(req, res) {
     await ExpA_Dictionary.aggregate([
       { $match: {"readers.testId": mongoose.Types.ObjectId(req.body.testId) ,"readers.asked": false}},
       { $unwind: "$readers"},
-      { $match: {"readers.testId": mongoose.Types.ObjectId(req.body.testId)}},
+      { $match: {"readers.testId": mongoose.Types.ObjectId(req.body.testId) ,"readers.asked": false}},
       { $sort: {"readers.date": 1}},
       { $project: {"word": 1}},
       { $limit: 1}

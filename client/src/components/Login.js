@@ -17,6 +17,10 @@ class Login extends Component {
     showProgressBar: false
   }
 
+  componentDidMount(){
+    this.rutInput.focus();
+  }
+
   onChangeInput(inputId){
     this.props.formInput({formId:'login', inputId:inputId, text: $('#'+inputId).val()})
   }
@@ -124,6 +128,12 @@ class Login extends Component {
     }
   }
 
+  handleKeyPress(input){
+    if(input.key==='Enter'){
+      this.onClickLogin();
+    }
+  }
+
   render(){
 
     if(this.props.application.userLogIn){
@@ -146,12 +156,21 @@ class Login extends Component {
               <div className="card-content">
 
                 <div className="input-field">
-                  <input value={this.props.formData.rut} onChange={() => this.onChangeInput('rut')} placeholder="12345678-9" id="rut" type="text" className={this.state.rutInputClassName}/>
+                  <input
+                    value={this.props.formData.rut}
+                    onKeyPress={(key) => this.handleKeyPress(key)}
+                    onChange={() => this.onChangeInput('rut')}
+                    placeholder="12345678-9"
+                    id="rut"
+                    type="text"
+                    className={this.state.rutInputClassName}
+                    ref={(input) => { this.rutInput = input; }}
+                  />
                   <label htmlFor="rut">Rut</label>
                 </div>
 
                 <div className="input-field">
-                  <input  value={this.props.formData.password} onChange={() => this.onChangeInput('password')} id="password" type="password" className={this.state.passwordInputClassName}/>
+                  <input value={this.props.formData.password} onKeyPress={(key) => this.handleKeyPress(key)} onChange={() => this.onChangeInput('password')} id="password" type="password" className={this.state.passwordInputClassName}/>
                   <label htmlFor="password">Contraseña</label>
                 </div>
 

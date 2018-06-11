@@ -17,14 +17,14 @@ class EndRoundModal extends Component {
     var content = [];
     if(this.props.showNextRoundButton){
       content.push(
-        <div key={1}>
-          <a onClick={() => this.onCloseModal('nextRound')} className="waves-effect btn light-green darken-4">Estoy listo para la proxima palabra</a>
+        <div key={1} className="col s6">
+          <a onClick={() => this.onCloseModal('nextRound')} className="waves-effect btn light-green darken-4">Próxima palabra</a>
         </div>
       );
       if(this.props.showEndExpButton){
         content.push(
-          <div key={2} style={{marginTop: '20px'}}>
-            <a onClick={() => this.onCloseModal('endExp')} className="waves-effect btn red darken-4">Quiero terminar por hoy</a>
+          <div key={2} className="col s6">
+            <a onClick={() => this.onCloseModal('endExp')} className="waves-effect btn red darken-4">Terminar por hoy</a>
           </div>
         );
       }
@@ -60,7 +60,7 @@ class EndRoundModal extends Component {
         closeOnEsc={false}
         onClose={() => this.onCloseModal()}
       >
-        <div className="row center-align">
+        <div className="row center-align noMargin">
           {this.renderContent()}
         </div>
       </Modal>

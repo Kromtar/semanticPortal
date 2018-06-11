@@ -13,12 +13,16 @@ class Portal extends Component {
     showProgressBar: false
   }
 
+  componentDidMount(){
+    this.roomInput.focus();
+  }
+
   onChangeInput(inputId){
     this.props.formInput({formId:'roomSelector', inputId:inputId, text: $('#'+inputId).val()})
   }
 
 
-  async onClickLogin(){
+  async onClickEnterRoom(){
     if(this.props.formData.room === ''){
       this.setState({roomInputClassName: 'invalid'});
     }else{
@@ -45,10 +49,16 @@ class Portal extends Component {
       return (
         <div className="row noMargin" style={{marginTop: '24px'}}>
           <div className='col s12 center-align'>
-            <a onClick={() => this.onClickLogin()} className="waves-effect btn light-green darken-4">Entrar a la sala</a>
+            <a onClick={() => this.onClickEnterRoom()} className="waves-effect btn light-green darken-4">Entrar a la sala</a>
           </div>
         </div>
       );
+    }
+  }
+
+  handleKeyPress(input){
+    if(input.key==='Enter'){
+      this.onClickEnterRoom();
     }
   }
 
@@ -74,7 +84,15 @@ class Portal extends Component {
                 <span className="card-title">Escribe el numero de tu sala</span>
 
                 <div className="input-field">
-                  <input value={this.props.formData.room} onChange={() => this.onChangeInput('room')} id="room" type="number" className={this.state.roomInputClassName}/>
+                  <input
+                    value={this.props.formData.room}
+                    onKeyPress={(key) => this.handleKeyPress(key)}
+                    onChange={() => this.onChangeInput('room')}
+                    id="room"
+                    type="number"
+                    className={this.state.roomInputClassName}
+                    ref={(input) => { this.roomInput = input; }}
+                  />
                   <label htmlFor="room">Sala</label>
                 </div>
 
