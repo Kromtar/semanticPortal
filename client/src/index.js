@@ -1,6 +1,7 @@
 import 'materialize-css/dist/js/materialize.min.js'
 import 'materialize-css/dist/css/materialize.min.css';
 import './css/customCss.css';
+import 'typeface-roboto';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
