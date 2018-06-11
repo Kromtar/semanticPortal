@@ -121,7 +121,6 @@ class ExpMain extends Component {
   async handleKeyPress(input){
     if(input.key==='Enter' && !this.state.enterKeyLocked){
       var time = new Date();
-
       //validar y deja en formato palabras
       var specialChars = "!@#$^&%*()+=-[]\/{}|:<>?,.";
       var inputValidate = this.props.formData.mainInput.trim();
@@ -141,12 +140,10 @@ class ExpMain extends Component {
       inputValidate = inputValidate.replace(/ú/gi,"u");
 
       //Se añade la palabra al cache. Retorna true si el cache esta lleno
-      console.log('primero');
       await this.props.addToWordList(
         {word: inputValidate, time: time.toISOString()}
       );
       //Si la lista ya tiene 10 palabras, se envia el cache
-      console.log('segundo');
       if(this.props.expAlpha.wordInputList.length >= 10){ //TODO: Valor se puede pasar a parametro
         //TODO: Probar otros metodos para que no se sienta el lag
         this.setState({enterKeyLocked: true});
@@ -250,8 +247,6 @@ class ExpMain extends Component {
   }
 
   render(){
-
-    console.log(this.props.expAlpha);
 
     //Redireccion en caso de error
     if(this.state.errorOnTest || this.state.endExp){

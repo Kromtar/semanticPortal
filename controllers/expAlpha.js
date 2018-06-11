@@ -63,9 +63,15 @@ async function loadUserTest(req, res) {
 //Busca la proxima palabra a mostrar al usuario
 async function loadNextWord(req, res) {
   try {
-    await ExpA_Dictionary.findOne({ "readers": { "$elemMatch": { "testId": req.body.testId, "asked": false }}},{word: 1}).sort({'readers.date': 1}).exec(function(err, word){
-      //TODO: remover corchetes
-      res.status(200).send({word});
+    await ExpA_Dictionary.aggregate([
+      { $match: {"readers.testId": mongoose.Types.ObjectId(req.body.testId) ,"readers.asked": false}},
+      { $unwind: "$readers"},
+      { $match: {"readers.testId": mongoose.Types.ObjectId(req.body.testId)}},
+      { $sort: {"readers.date": 1}},
+      { $project: {"word": 1}},
+      { $limit: 1}
+    ]).exec(function(err, word){
+      res.status(200).send({word: word[0]});
     });
   } catch(err){
     res.status(404).send(err);
@@ -131,7 +137,7 @@ async function endRound(req, res) {
         if(!wordSearchTest){
           await ExpA_Dictionary.update(
               { _id: wordSearch._id },
-              { $push: { readers: {testId: req.body.testId} } }
+              { $push: { readers: {testId: req.body.testId, date: item.date } }}
           );
         }
       }else{
@@ -140,6 +146,7 @@ async function endRound(req, res) {
           word: item.word,
           readers:[{
             testId: req.body.testId,
+            date: item.date
           }]
         });
         const newWord = await word.save();
