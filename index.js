@@ -2,7 +2,6 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const autoIncrement = require('mongoose-auto-increment');
 const path = require('path');
 
 //TODO: Agregar HTTPS
@@ -10,7 +9,6 @@ const path = require('path');
 //TODO: Capcha al crear cuenta (y hacer login ?)
 //TODO: JWT: HttpOnly y otros metodos de seguridad
 //TODO: Autoreconection to mongodb
-//TODO: Quitar autoIncrement
 
 mongoose.Promise = global.Promise;
 const app = express();
@@ -37,7 +35,7 @@ app.get('*', (req, res) => {
 });
 
 //Inicio de servicios
-const connection = mongoose.connect(process.env.MONGODBURI, {}, (err) => {
+const connection = mongoose.connect(process.env.MONGODBURI, { useMongoClient: true }, (err) => {
   if (err) {
     throw err;
   } else {
@@ -48,8 +46,6 @@ const connection = mongoose.connect(process.env.MONGODBURI, {}, (err) => {
     });
   }
 });
-
-autoIncrement.initialize(connection);
 
 //añadir modelos de mongodb
 require('./models/User');
