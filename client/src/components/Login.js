@@ -18,6 +18,9 @@ class Login extends Component {
   }
 
   componentDidMount(){
+    //TODO: Cuando ocurre un error en el experimento y se gatilla el regreso a la pagina inicial, estas funciones de focus general problemas.
+    //Donde alega que no se puede ejecutar una funcion de un objeto que no existe. El problema se puede deber al orden de ejecucion de componentDidMount
+    //y el momento donde se genera el objeto rutInput
     this.rutInput.focus();
   }
 
