@@ -273,14 +273,14 @@ class ExpMain extends Component {
           showEndExpButton={this.state.showEndExpButtonEndRoundModal}
         />
 
-        <div className='row'>
+        <div className='row' style={{marginTop: '30px'}}>
           <div className='col s12 center-align'>
             ¿Que relacionas con la siguiente palabra ?
             <h5>{this.props.expAlpha.actualWord}</h5>
           </div>
         </div>
         <div className='row'>
-          <div className='col s6 offset-s3 center-align'>
+          <div className='col s10 l6 offset-s1 offset-l3 center-align'>
             <div className="input-field">
               <input
                 disabled={this.state.enterKeyLocked}
@@ -296,12 +296,12 @@ class ExpMain extends Component {
           </div>
         </div>
         <div className='row'>
-          <div className='col s6 offset-s3 center-align'>
+          <div className='col s12 l6 offset-l3 center-align'>
             <div className='col s6 center-align'>
-              <a onClick={() => this.onClickNextRound()} className={this.state.nextWordButtonClass}>No se me ocurren más ideas</a>
+              <a onClick={() => this.onClickNextRound()} className={this.state.nextWordButtonClass}>Estoy sin ideas</a>
             </div>
             <div className='col s6 center-align'>
-              <a onClick={() => this.onClickHelpButton()} className="waves-effect btn blue">Ayuda, no entiendo algo</a>
+              <a onClick={() => this.onClickHelpButton()} className="waves-effect btn blue">Ayuda, no entiendo</a>
             </div>
           </div>
         </div>

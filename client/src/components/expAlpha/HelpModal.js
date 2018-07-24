@@ -69,8 +69,8 @@ class HelpModal extends Component {
           <div key={2} className="col s12 flow-text">
             <p><b>¿Cómo uso el sistema?</b></p>
             <p>A continuación el sistema le mostrará una palabra y una casilla para escribir. En esa casilla escriba por favor su primera asociación libre y luego presione la telca "ENTER" de su teclado. Al presionar la tecla "ENTER", su asociación libre será guardada y aparecerá la casilla vacía para que ingrese la siguiente asociación. </p>
-            <p>Cuando ya no se le ocurran más asociaciones libres, presione el botón "NO SE ME OCURREN MÁS IDEAS" y luego en "PRÓXIMA PALABRA" para pasar a la siguiente palabra.</p>
-            <p>Cuando ya se encuentre cansad@ de ingresar asociaciones y desee terminar la sesión de hoy, por favor presione "NO SE ME OCURREN MÁS IDEAS" y luego "TERMINAR POR HOY"</p>
+            <p>Cuando ya no se le ocurran más asociaciones libres, presione el botón "ESTOY SIN IDEAS" y luego en "PRÓXIMA PALABRA" para pasar a la siguiente palabra.</p>
+            <p>Cuando ya se encuentre cansad@ de ingresar asociaciones y desee terminar la sesión de hoy, por favor presione "ESTOY SIN IDEAS" y luego "TERMINAR POR AHORA"</p>
             <p>Muchas gracias por su participación en este experimento</p>
           </div>
         );

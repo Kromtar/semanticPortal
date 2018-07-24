@@ -14,14 +14,7 @@ class Login extends Component {
   state = {
     rutInputClassName: 'validate',
     passwordInputClassName: 'validate',
-    showProgressBar: false
-  }
-
-  componentDidMount(){
-    //TODO: Cuando ocurre un error en el experimento y se gatilla el regreso a la pagina inicial, estas funciones de focus general problemas.
-    //Donde alega que no se puede ejecutar una funcion de un objeto que no existe. El problema se puede deber al orden de ejecucion de componentDidMount
-    //y el momento donde se genera el objeto rutInput
-    this.rutInput.focus();
+    showProgressBar: false,
   }
 
   onChangeInput(inputId){
@@ -149,17 +142,17 @@ class Login extends Component {
         <NewAccountModal />
 
         <div className='row'>
-          <div className='col s6 offset-s3 center-align'>
-            Titulo del proyecto
+          <div className='col s6 offset-s3 center-align flow-text'>
+            <p style={{fontSize: "3rem"}} >Creativity UAI</p>
           </div>
         </div>
         <div className='row'>
-          <div className='col s6 offset-s3'>
-            <div className="card">
+          <div className='col s10 l6 offset-s1 offset-l3'>
+            <div className="card" style={{backgroundColor: "#f7f7f7"}}>
               <div className="card-content">
-
                 <div className="input-field">
                   <input
+                    autoFocus
                     value={this.props.formData.rut}
                     onKeyPress={(key) => this.handleKeyPress(key)}
                     onChange={() => this.onChangeInput('rut')}

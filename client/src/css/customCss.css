@@ -17,3 +17,11 @@
 .flow-text {
   font-size: 1.28rem !important;
 }
+
+.dropdown-content li>span {
+  padding: 14px 6px;
+}
+
+.input-field.col .dropdown-content [type="checkbox"]+label {
+  top:  -10px;
+}

@@ -14,7 +14,7 @@ class Portal extends Component {
   }
 
   componentDidMount(){
-    this.roomInput.focus();
+    //this.roomInput.focus();
   }
 
   onChangeInput(inputId){
@@ -76,15 +76,16 @@ class Portal extends Component {
     }
 
     return(
-        <div className='row'>
-          <div className='col s6 offset-s3'>
-            <div className="card">
+        <div className='row' style={{marginTop: '30px'}}>
+          <div className='col s10 l6 offset-s1 offset-l3'>
+            <div className="card" style={{backgroundColor: "#f7f7f7"}}>
               <div className="card-content">
 
                 <span className="card-title">Escribe el numero de tu sala</span>
 
                 <div className="input-field">
                   <input
+                    autoFocus
                     value={this.props.formData.room}
                     onKeyPress={(key) => this.handleKeyPress(key)}
                     onChange={() => this.onChangeInput('room')}
