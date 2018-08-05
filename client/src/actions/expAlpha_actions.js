@@ -6,7 +6,9 @@ import {
   EXP_A_ADD_WORD_LIST,
   EXP_A_LOAD_ROUND,
   EXP_A_CLEAR_WORD_LIST,
+  EXP_A_REDUCE_WORD_LIST,
   EXP_A_ADD_ROUND_READY,
+  EXP_A_EDIT_WORD_IN_CACHE,
   EXP_A_ADD_ROUND_WORD_COUNT
 } from './types';
 
@@ -44,7 +46,10 @@ export const initRound = (data, token) => async (dispatch) => {
 }
 
 export const addToWordList = (data) => dispatch => new Promise((resolve, reject) => {
+  //Añade la palabra al cache
   dispatch({ type: EXP_A_ADD_WORD_LIST, payload: data});
+  //Añade un contador al numero de palabras de la ronda
+  dispatch({ type: EXP_A_ADD_ROUND_WORD_COUNT, payload: {}});
   resolve();
 });
 
@@ -54,7 +59,9 @@ export const sendWordList = (data, token) => async (dispatch) => {
       return true;
     }
     await axios.post('/api/addWordToRelation', data, { headers: { authorization: "Bearer " +  token }});
-    dispatch({ type: EXP_A_CLEAR_WORD_LIST, payload: {} });
+    //dispatch({ type: EXP_A_CLEAR_WORD_LIST, payload: {} });
+    //Limpia las ultimas 5 palabras en cache
+    dispatch({ type: EXP_A_REDUCE_WORD_LIST, payload: {reduceIn: 5} });
     return true;
   }catch (err) {
     console.log(err);
@@ -87,3 +94,8 @@ export const sendPauseEvent = (data, token) => async (dispatch) => {
     return false;
   }
 }
+
+export const editWordInCache = (data) => dispatch => new Promise((resolve, reject) => {
+  dispatch({ type: EXP_A_EDIT_WORD_IN_CACHE, payload: data});
+  resolve();
+});

@@ -4,8 +4,9 @@ import $ from 'jquery';
 import * as actions from '../../actions'; //TODO: Encapsular
 import { Redirect } from 'react-router-dom';
 
-import HelpModal from './HelpModal';          //Modal de ayuda (ocupado como modal inicial)
-import EndRoundModal from './EndRoundModal';  //Modal de transicion entre rondas
+import HelpModal from './HelpModal';              //Modal de ayuda (ocupado como modal inicial)
+import EndRoundModal from './EndRoundModal';      //Modal de transicion entre rondas
+import CacheWordViewer from './CacheWordViewer';  //Componente para ver ultimas palabras y poder editarlas
 
 //TODO: Añadir tiempo maximo sin actividad antes de un cierre
 //TODO: que pasa si no se encuentran nuevas palabras al solicitar al dictionary?
@@ -13,7 +14,11 @@ import EndRoundModal from './EndRoundModal';  //Modal de transicion entre rondas
 //TODO: Quitar los acentos para homologar lo mas posible
 //TODO: Validar que no se puedan enviar peticiones en forma simultanea por sobre clicks
 
+//TODO: Quitar boton fantasma para pruebas
+
 class ExpMain extends Component {
+
+  wordInput = React.createRef();
 
   state = {
     showHelpModal: false,                               //Controla si se muestra el modal de ayuda
@@ -31,7 +36,13 @@ class ExpMain extends Component {
     nextWordButtonClass: 'waves-effect btn orange lighten-1 disabled',         //Clase del boton de proxima ronda
   }
 
+  componentWillMount() {
+     //console.info('ExpMain - componentWillMount');
+  }
+
   componentDidMount(){
+    //console.info('ExpMain - componentDidMount');
+
     //Comprobamos que el usuario este identificado
     if(!this.props.application.userLogIn){
       this.setState({
@@ -50,6 +61,37 @@ class ExpMain extends Component {
     this.initialLoad();
   }
 
+  //Se ejecuta cuando las props cambian
+  //Aqui se pueden ejecutar cambios de state
+  componentWillReceiveProps(newProps) {
+      //console.info('ExpMain - componentWillReceiveProps');
+      //console.info(newProps);
+   }
+
+   //shouldComponentUpdate(newProps, newState) {
+    //  console.info('ExpMain - shouldComponentUpdate');
+   //}
+
+   //Se ejecuta antes del render
+   componentWillUpdate(nextProps, nextState) {
+      //console.info('ExpMain - componentWillUpdate');
+      //console.info('nextProps: ');
+      //console.info(nextProps);
+      //console.info('nextState: ');
+      //console.info(nextState);
+   }
+
+   //Se ejecuta luego del render
+   componentDidUpdate(prevProps, prevState) {
+      if(prevProps.expAlpha.roundId !== this.props.expAlpha.roundId){ //Si se incio una nueva ronda
+        this.wordInput.current.focus();
+      }
+   }
+
+   //Se ejcuta cuando el componente se desmonta
+   componentWillUnmount() {
+      //console.info('ExpMain - componentWillUnmount');
+   }
 
   //Incia el experimento
   async initialLoad(){
@@ -99,7 +141,7 @@ class ExpMain extends Component {
         return;
       }
     }
-    this.nameInput.focus();
+    this.wordInput.current.focus();
   }
 
   //Inicia la ronda
@@ -131,7 +173,7 @@ class ExpMain extends Component {
       if(inputValidate === '' || inputValidate.length <= 1){
         this.props.formClear({formId: 'expA'});
         this.setState({enterKeyLocked: false});
-        this.nameInput.focus();
+        this.wordInput.current.focus();
         return;
       }
       inputValidate = inputValidate.toLowerCase();
@@ -141,15 +183,17 @@ class ExpMain extends Component {
       inputValidate = inputValidate.replace(/ó/gi,"o");
       inputValidate = inputValidate.replace(/ú/gi,"u");
 
-      //Se añade la palabra al cache. Retorna true si el cache esta lleno
+      //Se añade la palabra al cache y Añade un contador al numero de palabras de la ronda
       await this.props.addToWordList(
         {word: inputValidate, time: time.toISOString()}
       );
       //Si la lista ya tiene 10 palabras, se envia el cache
       if(this.props.expAlpha.wordInputList.length >= 10){ //TODO: Valor se puede pasar a parametro
         //TODO: Probar otros metodos para que no se sienta el lag
+        //Selecciona las primeras 5 palabras del cache y las envia a la DB
+        var solicedWordList = this.props.expAlpha.wordInputList.slice(0,5);
         const wordListSaved = await this.props.sendWordList({
-          wordList: this.props.expAlpha.wordInputList,
+          wordList: solicedWordList,
           roundId: this.props.expAlpha.roundId
         },this.props.user.token);
         if(!wordListSaved){
@@ -158,15 +202,13 @@ class ExpMain extends Component {
         }
         this.setState({enterKeyLocked: false});
       }
-      //Añade un contador al numero de palabras de la ronda
-      await this.props.addRoundWordCount();
       //Muestra el boton para terminar la ronda si se han ingresado 3 palabras o mas esta ronda
       if(this.props.expAlpha.wordOfRoundCount >= 2){ //TODO: Valor se puede pasar a parametro
         this.setState({nextWordButtonClass: 'waves-effect btn orange lighten-1'});
       }
       this.props.formClear({formId: 'expA'});
       this.setState({enterKeyLocked: false});
-      this.nameInput.focus();
+      this.wordInput.current.focus();
     }
   }
 
@@ -284,7 +326,7 @@ class ExpMain extends Component {
             <div className="input-field">
               <input
                 disabled={this.state.enterKeyLocked}
-                ref={(input) => { this.nameInput = input; }}
+                ref={this.wordInput}
                 value={this.props.formData.mainInput}
                 onChange={() => this.onChangeInput('mainInput')}
                 id="mainInput"
@@ -298,13 +340,23 @@ class ExpMain extends Component {
         <div className='row'>
           <div className='col s12 l6 offset-l3 center-align'>
             <div className='col s6 center-align'>
-              <a onClick={() => this.onClickNextRound()} className={this.state.nextWordButtonClass}>Estoy sin ideas</a>
+              <a onClick={() => this.onClickNextRound()} className={this.state.nextWordButtonClass}>Pasar palabra</a>
             </div>
             <div className='col s6 center-align'>
-              <a onClick={() => this.onClickHelpButton()} className="waves-effect btn blue">Ayuda, no entiendo</a>
+              <a onClick={() => this.onClickHelpButton()} className="waves-effect btn blue">Ver instrucciones</a>
             </div>
           </div>
         </div>
+        <div className='row'>
+          <div className='col s12 l6 offset-l3 center-align'>
+            <div className='col s12 center-align'>
+              <a onClick={() => this.onClickHelpButton()} className="waves-effect btn blue-grey">Pausa</a>
+              <a style={{display: 'none'}} onClick={() => this.handleKeyPress({key: 'Enter'})} className="waves-effect btn blue-grey">TEST</a>
+            </div>
+          </div>
+        </div>
+
+              <CacheWordViewer/>
 
       </div>
     );
