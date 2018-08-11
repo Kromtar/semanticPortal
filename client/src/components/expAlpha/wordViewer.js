@@ -57,7 +57,7 @@ class wordViewer extends Component {
       );
     }else {
       return (
-        <a onClick={() => this.onClickEnd()} className="waves-effect btn green lighten-3">Terminar</a>
+        <a onClick={() => this.onClickEnd()} className="waves-effect btn green">Terminar</a>
       );
     }
   }

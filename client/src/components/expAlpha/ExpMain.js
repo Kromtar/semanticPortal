@@ -34,6 +34,8 @@ class ExpMain extends Component {
     errorOnTest: false,             //Identifica si hay un error en la carga del experimento
     enterKeyLocked: false,          //Indica si se estan enviando palabras y hay que bloqear el input
     nextWordButtonClass: 'waves-effect btn orange lighten-1 disabled',         //Clase del boton de proxima ronda
+
+    displayCacheWordViewer: true, //Despliega o no el correcto de palabras
   }
 
   componentWillMount() {
@@ -290,6 +292,25 @@ class ExpMain extends Component {
     });
   }
 
+  checkboxCacheWordViewer(val){
+      this.setState({
+        displayCacheWordViewer: val,
+      });
+  }
+
+  //Dibuja la seccion donde se pueden corregir las palabras
+  renderCacheWordViewer(){
+    if(this.state.displayCacheWordViewer){
+      return (
+        <CacheWordViewer/>
+      );
+    }else{
+      return (
+        <div/>
+      );
+    }
+  }
+
   render(){
 
     //Redireccion en caso de error
@@ -321,6 +342,7 @@ class ExpMain extends Component {
             <h5>{this.props.expAlpha.actualWord}</h5>
           </div>
         </div>
+
         <div className='row'>
           <div className='col s10 l6 offset-s1 offset-l3 center-align'>
             <div className="input-field">
@@ -337,6 +359,7 @@ class ExpMain extends Component {
            Y click en "Enter" para enviar !
           </div>
         </div>
+
         <div className='row'>
           <div className='col s12 l6 offset-l3 center-align'>
             <div className='col s6 center-align'>
@@ -356,7 +379,27 @@ class ExpMain extends Component {
           </div>
         </div>
 
-              <CacheWordViewer/>
+        {this.renderCacheWordViewer()}
+
+        <div className='row'>
+          <div className='col s12 l6 offset-l3 center-align'>
+            <div className="switch">
+              <div>
+                Corrector
+              </div>
+              <label>
+                Apagado
+                <input
+                 defaultChecked
+                 type="checkbox"
+                 onChange={(obj) => this.checkboxCacheWordViewer(obj.target.checked)}
+                />
+                <span className="lever"></span>
+                Encendido
+              </label>
+            </div>
+          </div>
+        </div>
 
       </div>
     );
