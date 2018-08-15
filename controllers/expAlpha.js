@@ -11,39 +11,41 @@ const ExpA_Pauses = mongoose.model('exp_a_pauses');
 
 //TODO: Falta crear las collection para las pausas
 
-//Carga el test de un usuario, sino existe crea el test
+//Carga el test de un usuario, sino existe crea el test y todo lo relacionado
 async function loadUserTest(req, res) {
   try{
+    //Busca el test del usuario de un determinado experimento y es que activo
     const test = await ExpA_Tests.findOne(
       { _user: req.user.id, _experiment: req.body.experimentId, active: true },
       { _id: 1 }
     );
     if(test){
+      //Si el test existe retorna la informacion
       res.status(200).send(test);
     }else{
-      //Se crea el test
+      //Si no existe, se crea un nuevo test de un experimento determinado
       const test = new ExpA_Tests({
         _user: req.user.id,
         _experiment: req.body.experimentId,
       });
       const newTest = await test.save();
-      //Se carga el pool inicial
+      //Se lee el pool inicial de palabras del experimiento del cual forma parte el nuevo test
         const exp = await Experiment.findOne(
           {_id: req.body.experimentId}
         );
         forEach(exp.parameters.initialpool, async (item) => {
-          //Buscar si la palabra esta creada
+          //Buscar si las palabras estan ya en el diccionario
           const wordSearch = await ExpA_Dictionary.findOne(
             { word: item }
           );
           if(wordSearch){
-            //Si existe agregar el registro de testId
+            //Si existe, agrega el registro del nuevo test a la palabra para ser preguntada
             await ExpA_Dictionary.update(
                 { _id: wordSearch._id },
                 { $push: { readers: {testId: newTest._id} } }
             );
           }else{
-            //Si NO existe la palabra agregar palabra y registro de test
+            //Si NO existe la palabra, se crea la nueva palabra y agerega el registro para ser preguntada
             const word = new ExpA_Dictionary({
               word: item,
               readers:[{
@@ -53,6 +55,7 @@ async function loadUserTest(req, res) {
             const newWord = await word.save();
           }
         });
+      //Retorna el nuevo test
       res.status(200).send({_id: newTest._id});
     }
   } catch(err){
