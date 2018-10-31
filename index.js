@@ -66,16 +66,4 @@ require('./routes/userRoutes')(app);
 require('./routes/roomRoutes')(app);
 require('./routes/expAlphaRoutes')(app);
 require('./routes/expBetaRoutes')(app);
-
-
-//FAKER DE LA LISTA QUE SE CONFECCIONA EN PYTHON
-/*
-const TESTMODEL = mongoose.model('exp_b_words_list');
-const test = new TESTMODEL({
-  _user: "5b64758e590f6938d4518ad3",
-  _alphaExpSource: "5ad3d6a2c2c7ad0558e0ead8",
-  roomBetaNumber: "1112",
-  wordsAssociates: [{word: 'arbol'},{word: 'casa'},{word: 'perro'},{word: 'lago'},{word: 'universidad'},{word: 'payaso'}]
-});
-test.save();
-*/
+ 
