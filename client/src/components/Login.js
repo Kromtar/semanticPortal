@@ -14,11 +14,7 @@ class Login extends Component {
   state = {
     rutInputClassName: 'validate',
     passwordInputClassName: 'validate',
-    showProgressBar: false
-  }
-
-  componentDidMount(){
-    this.rutInput.focus();
+    showProgressBar: false,
   }
 
   onChangeInput(inputId){
@@ -146,17 +142,17 @@ class Login extends Component {
         <NewAccountModal />
 
         <div className='row'>
-          <div className='col s6 offset-s3 center-align'>
-            Titulo del proyecto
+          <div className='col s6 offset-s3 center-align flow-text'>
+            <p style={{fontSize: "3rem"}} >Creativity UAI</p>
           </div>
         </div>
         <div className='row'>
-          <div className='col s6 offset-s3'>
-            <div className="card">
+          <div className='col s10 l6 offset-s1 offset-l3'>
+            <div className="card" style={{backgroundColor: "#f7f7f7"}}>
               <div className="card-content">
-
                 <div className="input-field">
                   <input
+                    autoFocus
                     value={this.props.formData.rut}
                     onKeyPress={(key) => this.handleKeyPress(key)}
                     onChange={() => this.onChangeInput('rut')}

@@ -2,7 +2,6 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const autoIncrement = require('mongoose-auto-increment');
 const path = require('path');
 
 //TODO: Agregar HTTPS
@@ -10,7 +9,6 @@ const path = require('path');
 //TODO: Capcha al crear cuenta (y hacer login ?)
 //TODO: JWT: HttpOnly y otros metodos de seguridad
 //TODO: Autoreconection to mongodb
-//TODO: Quitar autoIncrement
 
 mongoose.Promise = global.Promise;
 const app = express();
@@ -37,7 +35,7 @@ app.get('*', (req, res) => {
 });
 
 //Inicio de servicios
-const connection = mongoose.connect(process.env.MONGODBURI, {}, (err) => {
+const connection = mongoose.connect(process.env.MONGODBURI, { useMongoClient: true }, (err) => {
   if (err) {
     throw err;
   } else {
@@ -49,19 +47,35 @@ const connection = mongoose.connect(process.env.MONGODBURI, {}, (err) => {
   }
 });
 
-autoIncrement.initialize(connection);
-
 //añadir modelos de mongodb
 require('./models/User');
 require('./models/Experiment');
+
 require('./models/ExpA_Test');
 require('./models/ExpA_RoundAndRelation');
-//require('./models/ExpA_WaitingWords');
 require('./models/ExpA_Pauses');
 require('./models/ExpA_Dictionary');
+
+require('./models/ExpB_Test');
+require('./models/ExpB_WordList');
+require('./models/ExpB_RelationNodes');
 
 //añadir rutas http
 require('./routes/authRoutes')(app);
 require('./routes/userRoutes')(app);
 require('./routes/roomRoutes')(app);
 require('./routes/expAlphaRoutes')(app);
+require('./routes/expBetaRoutes')(app);
+
+
+//FAKER DE LA LISTA QUE SE CONFECCIONA EN PYTHON
+/*
+const TESTMODEL = mongoose.model('exp_b_words_list');
+const test = new TESTMODEL({
+  _user: "5b64758e590f6938d4518ad3",
+  _alphaExpSource: "5ad3d6a2c2c7ad0558e0ead8",
+  roomBetaNumber: "1112",
+  wordsAssociates: [{word: 'arbol'},{word: 'casa'},{word: 'perro'},{word: 'lago'},{word: 'universidad'},{word: 'payaso'}]
+});
+test.save();
+*/

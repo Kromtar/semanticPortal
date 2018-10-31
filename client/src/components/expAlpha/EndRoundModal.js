@@ -24,7 +24,7 @@ class EndRoundModal extends Component {
       if(this.props.showEndExpButton){
         content.push(
           <div key={2} className="col s6">
-            <a onClick={() => this.onCloseModal('endExp')} className="waves-effect btn red darken-4">Terminar por hoy</a>
+            <a onClick={() => this.onCloseModal('endExp')} className="waves-effect btn red darken-4">Terminar por ahora</a>
           </div>
         );
       }

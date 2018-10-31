@@ -56,7 +56,26 @@ async function loginUser(req, res) {
   }
 }
 
+//Cambia Contraseña
+async function changePassword(req, res){
+  const params = req.body;
+  const user = new User({});
+  const newPassword = user.generateHash(params.newPassword);
+  try{
+    const userPasswordChange = await User.update(
+      {rut: params.rut},
+      {$set: {
+        password: newPassword
+      }}
+    );
+    res.status(200).send("OK");
+  }catch(err){
+    res.status(404).send(err);
+  }
+}
+
 module.exports = {
   createUser,
-  loginUser
+  loginUser,
+  changePassword
 };
