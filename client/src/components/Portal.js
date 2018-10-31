@@ -8,19 +8,28 @@ import { Redirect } from 'react-router-dom';
 
 class Portal extends Component {
 
+  constructor(props) {
+    super(props);
+    //PARA MANEJAR POSIBLES setState luego que el componente no esta montado. Provocado por peticiones asyncronas
+    this._isMounted = false;
+  }
+
   state = {
     roomInputClassName: 'validate',
     showProgressBar: false
   }
 
   componentDidMount(){
-    //this.roomInput.focus();
+    this._isMounted = true;
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   onChangeInput(inputId){
     this.props.formInput({formId:'roomSelector', inputId:inputId, text: $('#'+inputId).val()})
   }
-
 
   async onClickEnterRoom(){
     if(this.props.formData.room === ''){
@@ -30,11 +39,12 @@ class Portal extends Component {
       this.setState({roomInputClassName: 'valid'});
       this.setState({showProgressBar: true});
       res = await this.props.roomSelect({room: this.props.formData.room}, this.props.user.token);
-      if(!res){
+      if(!res && this._isMounted){
         this.setState({showProgressBar: false});
         this.setState({roomInputClassName: 'invalid'});
         //TODO: Agregar texto de error
       }
+
     }
   }
 
@@ -72,6 +82,10 @@ class Portal extends Component {
       if(this.props.application.expPublicId === 1){
         //Carga el experimento alpha
         return <Redirect to='/portal/alpha' />
+      }
+      if(this.props.application.expPublicId === 2){
+        //Carga el experimento beta
+        return <Redirect to='/portal/beta' />
       }
     }
 

@@ -17,3 +17,6 @@ export const EXP_A_ADD_ROUND_READY = 'expaaddroundready';
 export const EXP_A_ADD_ROUND_WORD_COUNT = 'expaaddroundwordcount';
 export const EXP_A_EDIT_WORD_IN_CACHE = 'expaeditwordincache';
 export const USER_LOG_OUT = 'userLogOut';
+export const EXP_LOAD_BETA = 'expLoadBeta';
+export const EXP_B_LOAD_TEST='expBloadTest';
+export const EXP_B_EXTREMES_WORDS='expBExtremesWords';

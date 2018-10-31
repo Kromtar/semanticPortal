@@ -50,14 +50,32 @@ const connection = mongoose.connect(process.env.MONGODBURI, { useMongoClient: tr
 //añadir modelos de mongodb
 require('./models/User');
 require('./models/Experiment');
+
 require('./models/ExpA_Test');
 require('./models/ExpA_RoundAndRelation');
-//require('./models/ExpA_WaitingWords');
 require('./models/ExpA_Pauses');
 require('./models/ExpA_Dictionary');
+
+require('./models/ExpB_Test');
+require('./models/ExpB_WordList');
+require('./models/ExpB_RelationNodes');
 
 //añadir rutas http
 require('./routes/authRoutes')(app);
 require('./routes/userRoutes')(app);
 require('./routes/roomRoutes')(app);
 require('./routes/expAlphaRoutes')(app);
+require('./routes/expBetaRoutes')(app);
+
+
+//FAKER DE LA LISTA QUE SE CONFECCIONA EN PYTHON
+/*
+const TESTMODEL = mongoose.model('exp_b_words_list');
+const test = new TESTMODEL({
+  _user: "5b64758e590f6938d4518ad3",
+  _alphaExpSource: "5ad3d6a2c2c7ad0558e0ead8",
+  roomBetaNumber: "1112",
+  wordsAssociates: [{word: 'arbol'},{word: 'casa'},{word: 'perro'},{word: 'lago'},{word: 'universidad'},{word: 'payaso'}]
+});
+test.save();
+*/
