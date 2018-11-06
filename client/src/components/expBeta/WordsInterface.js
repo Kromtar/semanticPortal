@@ -41,7 +41,7 @@ class WordsInterface extends Component {
         lockButton: true,
       });
 
-      //HAY QUE DEJAR EN MINISCULA Y PROCESAR ACENTOS Y OTROS
+      //HAY QUE DEJAR EN MINISCULA Y PROCESAR ACENTOS Y OTROS (ESPACIOSs)
 
       const allOK = await this.props.sendRelationWords(
         {
@@ -69,6 +69,17 @@ class WordsInterface extends Component {
     var conectionArray = [];
     var output = [];
     var err = false;
+
+    //Elimina los espacios
+    inputString = inputString.replace(/ /g,"");
+    //Dejamos en minuscula
+    inputString = inputString.toLowerCase();
+    //Removemos acentos
+    inputString = inputString.replace(/á/gi,"a");
+    inputString = inputString.replace(/é/gi,"e");
+    inputString = inputString.replace(/í/gi,"i");
+    inputString = inputString.replace(/ó/gi,"o");
+    inputString = inputString.replace(/ú/gi,"u");
 
     //Verifica que el primer y ultimo caracter sean simbolos de conexion
     if(inputString[0] !== "<" && inputString[0] !== ">" && inputString[0] !== "=") return -1
@@ -108,7 +119,7 @@ class WordsInterface extends Component {
     return(
       <div className='row' style={{marginTop: '30px'}}>
         <div className='col s4 center-align'>
-          {this.props.expBeta.extremesWords[0].word}
+          <b style={{fontSize: 'xx-large'}}>{this.props.expBeta.extremesWords[0].word}</b>
         </div>
         <div className='col s4 center-align'>
           <input
@@ -120,7 +131,7 @@ class WordsInterface extends Component {
           />
         </div>
         <div className='col s4 center-align'>
-          {this.props.expBeta.extremesWords[1].word}
+          <b style={{fontSize: 'xx-large'}}>{this.props.expBeta.extremesWords[1].word}</b>
         </div>
         <div className='col s12 center-align'>
           <a

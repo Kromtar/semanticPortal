@@ -2,6 +2,7 @@ import {
   EXP_LOAD_BETA,
   EXP_B_LOAD_TEST,
   EXP_B_EXTREMES_WORDS,
+  EXP_B_OUTOFWORDS,
 } from '../actions/types';
 import _ from 'lodash';
 import update from 'react-addons-update';
@@ -11,7 +12,8 @@ var defaultValues = {
     alphaExpIdSource: ''        //id del experimento alpha de donde vienen los datos
   },
   testId: '',                   //id del test
-  extremesWords: [],   //palabras extremas que se tiene que unir
+  extremesWords: [],            //palabras extremas que se tiene que unir
+  err: ''
 }
 
 export default function(state = defaultValues , action) {
@@ -25,6 +27,9 @@ export default function(state = defaultValues , action) {
       return newState;
     case EXP_B_EXTREMES_WORDS:
       newState = update(state, {extremesWords: {$set: action.payload.extremesWords} });
+      return newState;
+    case EXP_B_OUTOFWORDS:
+      newState = update(state, {err: {$set: "outofwords"} });
       return newState;
     default:
       return state;
