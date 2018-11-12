@@ -3,6 +3,7 @@ import axios from 'axios';
 import {
   EXP_B_LOAD_TEST,
   EXP_B_EXTREMES_WORDS,
+  EXP_B_OUTOFWORDS,
 } from './types';
 
 //La data que tengo que enviar es el token, la id del experimento de donde quiero que venga la data (ej 1111)
@@ -24,7 +25,9 @@ export const loadExpBetaWords = (data, token) => async (dispatch) => {
     dispatch({ type: EXP_B_EXTREMES_WORDS, payload: { extremesWords: res.data } });
     return true;
   } catch (err) {
-    console.log(err);
+    if(err.response.data.err === "outOfWords"){
+      dispatch({ type: EXP_B_OUTOFWORDS, payload: {} });
+    }
     return false;
   }
 }
@@ -43,7 +46,9 @@ export const sendRelationWords = (data, token) => async (dispatch) => {
     dispatch({ type: EXP_B_EXTREMES_WORDS, payload: { extremesWords: res.data } });
     return true;
   } catch (err) {
-    console.log(err);
+    if(err.response.data.err === "outOfWords"){
+      dispatch({ type: EXP_B_OUTOFWORDS, payload: {} });
+    }
     return false;
   }
 }

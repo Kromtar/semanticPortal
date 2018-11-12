@@ -5,6 +5,12 @@ import * as actions from '../../actions';
 
 class WordsInterface extends Component {
 
+  constructor(props) {
+    super(props);
+    //PARA MANEJAR POSIBLES setState luego que el componente no esta montado. Provocado por peticiones asyncronas
+    this._isMounted = false;
+  }
+
   input = React.createRef();
 
   state = {
@@ -14,7 +20,12 @@ class WordsInterface extends Component {
   }
 
   componentDidMount(){
+    this._isMounted = true;
     this.input.current.focus();
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   //Manejo de input
@@ -41,7 +52,7 @@ class WordsInterface extends Component {
         lockButton: true,
       });
 
-      //HAY QUE DEJAR EN MINISCULA Y PROCESAR ACENTOS Y OTROS
+      //HAY QUE DEJAR EN MINISCULA Y PROCESAR ACENTOS Y OTROS (ESPACIOSs)
 
       const allOK = await this.props.sendRelationWords(
         {
@@ -55,11 +66,13 @@ class WordsInterface extends Component {
       if(!allOK){
         console.log("Error al enviar relaciones");
       }
-      this.setState({
-        lockButton: false,
-        input: '',
-      });
-      this.input.current.focus();
+      if(this._isMounted){ //El componente se puede desmontar si es que el experimento termina
+        this.setState({
+          lockButton: false,
+          input: '',
+        });
+        this.input.current.focus();
+      }
     }
   }
 
@@ -69,6 +82,17 @@ class WordsInterface extends Component {
     var conectionArray = [];
     var output = [];
     var err = false;
+
+    //Elimina los espacios
+    inputString = inputString.replace(/ /g,"");
+    //Dejamos en minuscula
+    inputString = inputString.toLowerCase();
+    //Removemos acentos
+    inputString = inputString.replace(/á/gi,"a");
+    inputString = inputString.replace(/é/gi,"e");
+    inputString = inputString.replace(/í/gi,"i");
+    inputString = inputString.replace(/ó/gi,"o");
+    inputString = inputString.replace(/ú/gi,"u");
 
     //Verifica que el primer y ultimo caracter sean simbolos de conexion
     if(inputString[0] !== "<" && inputString[0] !== ">" && inputString[0] !== "=") return -1
@@ -108,7 +132,7 @@ class WordsInterface extends Component {
     return(
       <div className='row' style={{marginTop: '30px'}}>
         <div className='col s4 center-align'>
-          {this.props.expBeta.extremesWords[0].word}
+          <b style={{fontSize: 'xx-large'}}>{this.props.expBeta.extremesWords[0].word}</b>
         </div>
         <div className='col s4 center-align'>
           <input
@@ -120,7 +144,7 @@ class WordsInterface extends Component {
           />
         </div>
         <div className='col s4 center-align'>
-          {this.props.expBeta.extremesWords[1].word}
+          <b style={{fontSize: 'xx-large'}}>{this.props.expBeta.extremesWords[1].word}</b>
         </div>
         <div className='col s12 center-align'>
           <a
