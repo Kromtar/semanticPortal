@@ -5,6 +5,12 @@ import * as actions from '../../actions';
 
 class WordsInterface extends Component {
 
+  constructor(props) {
+    super(props);
+    //PARA MANEJAR POSIBLES setState luego que el componente no esta montado. Provocado por peticiones asyncronas
+    this._isMounted = false;
+  }
+
   input = React.createRef();
 
   state = {
@@ -14,7 +20,12 @@ class WordsInterface extends Component {
   }
 
   componentDidMount(){
+    this._isMounted = true;
     this.input.current.focus();
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   //Manejo de input
@@ -55,11 +66,13 @@ class WordsInterface extends Component {
       if(!allOK){
         console.log("Error al enviar relaciones");
       }
-      this.setState({
-        lockButton: false,
-        input: '',
-      });
-      this.input.current.focus();
+      if(this._isMounted){ //El componente se puede desmontar si es que el experimento termina
+        this.setState({
+          lockButton: false,
+          input: '',
+        });
+        this.input.current.focus();
+      }
     }
   }
 

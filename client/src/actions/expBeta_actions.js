@@ -46,7 +46,9 @@ export const sendRelationWords = (data, token) => async (dispatch) => {
     dispatch({ type: EXP_B_EXTREMES_WORDS, payload: { extremesWords: res.data } });
     return true;
   } catch (err) {
-    console.log(err);
+    if(err.response.data.err === "outOfWords"){
+      dispatch({ type: EXP_B_OUTOFWORDS, payload: {} });
+    }
     return false;
   }
 }
