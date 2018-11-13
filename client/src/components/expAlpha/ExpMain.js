@@ -185,6 +185,16 @@ class ExpMain extends Component {
       inputValidate = inputValidate.replace(/ó/gi,"o");
       inputValidate = inputValidate.replace(/ú/gi,"u");
 
+      //AQUI TENEMOS QUE BUSCAR SI LA PALABRA YA ESTA EN EL CACHE
+      for(let wordInCacheIndex = 0; wordInCacheIndex<this.props.expAlpha.wordInputList.length; wordInCacheIndex++){
+        if(this.props.expAlpha.wordInputList[wordInCacheIndex].word === inputValidate){
+          this.props.formClear({formId: 'expA'});
+          this.setState({enterKeyLocked: false});
+          this.wordInput.current.focus();
+          return;
+        }
+      }
+
       //Se añade la palabra al cache y Añade un contador al numero de palabras de la ronda
       await this.props.addToWordList(
         {word: inputValidate, time: time.toISOString()}
