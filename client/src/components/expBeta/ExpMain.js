@@ -92,8 +92,8 @@ class ExpMainBeta extends Component {
         <div>
           <div className='row' style={{marginTop: '30px'}}>
             <div className='col s8 offset-s1 flow-text'>
-              <p>En esta prueba tienes que relacionar las dos palabras en negrita que están en pantalla. </p>
-              <p>Las asaciones libres las puedes realizar rellenando el formulario que este entre las dos palabras en negrita.</p>
+              <p>En esta prueba tienes que relacionar las dos palabras en negrita que están en la parte inferior de la pantalla. </p>
+              <p>Las asociaciones libres las puedes realizar rellenando el formulario que este entre las dos palabras en negrita.</p>
               <p><b>Las asociaciones entre las dos palabras son libres</b>, esto quiere decir que puedes ocupar cualquier palabra que se te venga a la mente. Puedes ocupar una o más palabras para relacionar las palabras en negrita. Las palabras llevan un símbolo entremedio para indicar la dirección de la relación. Estos pueden ser:</p>
               <p> "&#60;" la relación va desde la palabra de la derecha a la izquierda</p>
               <p> "&#62;" relación va desde la palabra de la izquierda a la derecha</p>
