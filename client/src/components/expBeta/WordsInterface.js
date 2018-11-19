@@ -98,6 +98,13 @@ class WordsInterface extends Component {
     if(inputString[0] !== "<" && inputString[0] !== ">" && inputString[0] !== "=") return -1
     if(inputString[inputString.length - 1] !== "<" && inputString[inputString.length - 1] !== ">" && inputString[inputString.length - 1] !== "=") return -1
 
+    //En caso que el input sea una relacion directa entre las dos palabras preguntadas
+    if(inputString.length === 1){
+      console.log("Es solo un simbolo");
+      createRelation(initWord,endWord,inputString[0]);
+      return output;
+    }
+
     wordsArray = inputString.split(/<|>|=/);
     wordsArray = wordsArray.slice(1,wordsArray.length - 1);
 

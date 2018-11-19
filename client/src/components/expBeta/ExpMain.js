@@ -99,6 +99,7 @@ class ExpMainBeta extends Component {
               <p> "&#62;" relación va desde la palabra de la izquierda a la derecha</p>
               <p> "&#61;" la relación puede ir para ambos lados</p>
               <p> Ejemplo: </p>
+              <p> <b>musica</b> &#60; <b>piano</b></p>
               <p> <b>piano</b> &#62;teatro&#61; <b>ciudad</b></p>
               <p> <b>perro</b> &#60;veterinario&#60;medicina&#61; <b>doctor</b></p>
             </div>
